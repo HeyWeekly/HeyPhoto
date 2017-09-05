@@ -81,8 +81,9 @@
     CGFloat cellW2 = 22*screenRate;
     CGFloat cellH2 = 22*screenRate;
     CGFloat margin2 =9*screenRate;
-    
-    for(int index = 0; index< [WWUserModel shareUserModel].yearDay.integerValue; index++) {
+    WWUserModel *model =  [WWUserModel shareUserModel];
+    model = (WWUserModel*)[NSKeyedUnarchiver unarchiveObjectWithFile:ArchiverPath];
+    for(int index = 0; index< model.yearDay.integerValue; index++) {
         UIView *cellView = [[UIView alloc ]init ];
 //        cellView.layer.shadowColor = RGBCOLOR(0x27ECCC).CGColor;
 //        cellView.layer.shadowOpacity = 0.35;
@@ -100,7 +101,9 @@
         gradientLayer.startPoint = CGPointMake(0.0, 0.0);
         gradientLayer.endPoint = CGPointMake(0.9, 0.9);
         gradientLayer.frame = CGRectMake(0, 0, CGRectGetWidth(cellView.frame), CGRectGetHeight(cellView.frame));
-        if (index == [WWUserModel shareUserModel].yearDay.integerValue-1) {
+        WWUserModel *model =  [WWUserModel shareUserModel];
+        model = (WWUserModel*)[NSKeyedUnarchiver unarchiveObjectWithFile:ArchiverPath];
+        if (index == model.yearDay.integerValue-1) {
             gradientLayer.colors = @[(__bridge id)RGBCOLOR(0x27EBCD).CGColor,(__bridge id)RGBCOLOR(0x16C3FE).CGColor];
         }else if(index >= 0+row*10 && index <= row*10+3 ){
             gradientLayer.backgroundColor = [UIColor colorWithRed:0/255.0 green:255/255.0 blue:213/255.0 alpha:1].CGColor;
@@ -112,7 +115,8 @@
         [cellView.layer addSublayer:gradientLayer];
         // 添加到view 中
         [self.view addSubview:cellView];
-        if (index == [WWUserModel shareUserModel].yearDay.integerValue-1) {
+        
+        if (index == model.yearDay.integerValue-1) {
             self.animationView = cellView;
             [GCDQueue executeInMainQueue:^{
                 [self scaleAnimation];
@@ -158,18 +162,24 @@
 }
 - (void)setupCustomCell:(UICollectionViewCell *)cell forIndex:(NSInteger)index cycleScrollView:(SDCycleScrollView *)view {
     HomeYearsCell *myCell = (HomeYearsCell *)cell;
+    WWUserModel *model =  [WWUserModel shareUserModel];
+    model = (WWUserModel*)[NSKeyedUnarchiver unarchiveObjectWithFile:ArchiverPath];
     if (index == 0) {
-        myCell.yearsNum.text = [WWUserModel shareUserModel].yearDay;
+        myCell.yearsNum.text = model.yearDay;
         myCell.yearLbael.text = @"YEARS OLD";
     }else if (index == 1){
-        myCell.yearsNum.text = [WWUserModel shareUserModel].dataStr;
+        myCell.yearsNum.text = model.dataStr;
         myCell.yearLbael.text = @"DAY";
     }
 }
 
 #pragma mark - 点击事件
 - (void)publishBtnClick {
-    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 delegate:self];
+    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:3 delegate:nil];
+    imagePickerVc.allowPickingOriginalPhoto = NO;
+    imagePickerVc.isSelectOriginalPhoto = NO;
+    imagePickerVc.allowPickingVideo = NO;
+    imagePickerVc.sortAscendingByModificationDate = NO;
     [self presentViewController:imagePickerVc animated:YES completion:nil];
 }
 

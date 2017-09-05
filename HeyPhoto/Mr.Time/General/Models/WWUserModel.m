@@ -9,42 +9,26 @@
 #import "WWUserModel.h"
 #import "NSObject+YYModel.h"
 
-static WWUserModel *instance = nil;
-
 @implementation WWUserModel
+
+static WWUserModel *_instance;
 
 + (instancetype)shareUserModel {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if (instance == nil) {
-            instance = [[WWUserModel alloc]init];
-            instance = (WWUserModel *)[NSKeyedUnarchiver unarchiveObjectWithFile:ArchiverPath];
-        }
+            _instance = [[super allocWithZone:NULL] init] ;
     });
-    return instance;
+    return _instance;
 }
 
-+(instancetype)allocWithZone:(struct _NSZone *)zone{
-    if (instance == nil) {
-        instance = [super allocWithZone:zone];
-    }
-    return instance;
++(id) allocWithZone:(struct _NSZone *)zone
+{
+    return [WWUserModel shareUserModel] ;
 }
 
--(id)copy {
-    return self;
-}
-
--(id)mutableCopy {
-    return self;
-}
-
--(id)copyWithZone:(NSZone *)zone {
-    return self;
-}
-
--(id)mutableCopyWithZone:(NSZone *)zone {
-    return self;
+-(id) copyWithZone:(struct _NSZone *)zone
+{
+    return [WWUserModel shareUserModel] ;
 }
 /// 保存用户信息
 - (void) saveAccount {
@@ -52,7 +36,7 @@ static WWUserModel *instance = nil;
 }
 ///  清空用户信息
 + (void)clearUserAccount {
-    instance = nil;
+    _instance = nil;
     [[NSFileManager defaultManager] removeItemAtPath:ArchiverPath error:nil];
 }
 

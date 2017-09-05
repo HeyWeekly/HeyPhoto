@@ -53,9 +53,6 @@
     self.sepView.width = 140*screenRate;
     self.sepView.height = 2;
     
-    if ([WWUserModel shareUserModel].nickname) {
-        self.nickName.text = [WWUserModel shareUserModel].nickname;
-    }
     [self.view addSubview:self.nickName];
     [self.nickName sizeToFit];
     self.nickName.centerX = self.view.centerX;
@@ -164,9 +161,10 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotify_MainNavShowError object:nil userInfo:@{kUserInfo_MainNavErrorMsg:@"用户名最长6个中文字符（12个英文字符）"}];
         return;
     }
-    [WWUserModel shareUserModel].nickname = self.nickName.text;
-    [WWUserModel shareUserModel].headimg = self.settingHeadImage.image;
-    [[WWUserModel shareUserModel] saveAccount];
+    WWUserModel *userModel = [[WWUserModel alloc]init];
+    userModel.nickname = self.nickName.text;
+    userModel.headimg = self.settingHeadImage.image;
+    [userModel saveAccount];
     WWLoginBirthdaySetting *vc = [[WWLoginBirthdaySetting alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -260,6 +258,7 @@
         _settingHeadImage = [[UIImageView alloc]initWithFrame:CGRectMake(KWidth/2 - self.backheadImage.width/2 + 6, self.thisNickName.bottom+90*screenRate, 98, 98)];
         _settingHeadImage.image = [UIImage imageNamed:@"defaulthead"];
         _settingHeadImage.clipsToBounds = YES;
+        _settingHeadImage.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _settingHeadImage;
 }

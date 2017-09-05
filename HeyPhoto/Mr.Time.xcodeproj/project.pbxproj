@@ -864,6 +864,7 @@
 		C0A69F5B1EE92DBA00DB4678 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				C0CBA6401F5EA00E008DC3B9 /* WWPictureTagsManager */,
 				C06351271F4440E500820458 /* WWErrorView */,
 				C07AC08B1F42E2AC00EBED61 /* NetWorkTools */,
 				C07AC0611F3DCCFD00EBED61 /* Category */,
@@ -997,6 +998,13 @@
 				C0CBA6301F5E84AC008DC3B9 /* UIView+Layout.m */,
 			);
 			path = TZImagePickerController;
+			sourceTree = "<group>";
+		};
+		C0CBA6401F5EA00E008DC3B9 /* WWPictureTagsManager */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = WWPictureTagsManager;
 			sourceTree = "<group>";
 		};
 		C0D48A251EF67EBC00B92549 /* GCD */ = {
@@ -1809,7 +1817,7 @@
 			baseConfigurationReference = A11F728AAD1C437A121BCF73 /* Pods-Mr.Time.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Offape Technology Co., Ltd. (2CSYYV5Z4H)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = WQUPS6XKQ9;
@@ -1837,7 +1845,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.steaest.heyPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "329ab76e-4ccf-42fd-adc0-3ea30bad94eb";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Mr.Time/Mr.Time-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1850,7 +1858,7 @@
 			baseConfigurationReference = 6A3E3194488AB383DFA6D83F /* Pods-Mr.Time.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Offape Technology Co., Ltd. (2CSYYV5Z4H)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = WQUPS6XKQ9;
@@ -1878,7 +1886,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.steaest.heyPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "329ab76e-4ccf-42fd-adc0-3ea30bad94eb";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Mr.Time/Mr.Time-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

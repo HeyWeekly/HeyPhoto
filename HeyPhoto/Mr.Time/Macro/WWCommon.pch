@@ -45,6 +45,8 @@ __strong typeof(weakSelf) strongSelf = weakSelf
 #   define NSLog(...)
 #endif
 
+#define MODEL [WWUserModel shareUserModel];
+#define  USERMODEL MODEL = (WWUserModel*)[NSKeyedUnarchiver unarchiveObjectWithFile:ArchiverPath];
 
 #define WWUserDefault [NSUserDefaults standardUserDefaults]
 #define screenRate ( KWidth / 375.0)
