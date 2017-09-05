@@ -24,6 +24,8 @@
 }
 @property (nonatomic, strong) UIView *animationView;
 @property (nonatomic, strong) UIButton *puslishBtn;
+@property (nonatomic, strong) NSMutableArray *originImageArray;
+@property (nonatomic, strong) NSMutableArray *cutImageArray;
 @end
 
 #define totalColumns 10
@@ -173,13 +175,18 @@
     }
 }
 
+- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto{
+    
+}
 #pragma mark - 点击事件
 - (void)publishBtnClick {
-    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:3 delegate:nil];
-    imagePickerVc.allowPickingOriginalPhoto = NO;
-    imagePickerVc.isSelectOriginalPhoto = NO;
+    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:3 delegate:self];
+    imagePickerVc.allowPickingOriginalPhoto = YES;
+    imagePickerVc.isSelectOriginalPhoto = YES;
     imagePickerVc.allowPickingVideo = NO;
     imagePickerVc.sortAscendingByModificationDate = NO;
+    imagePickerVc.photoWidth = KWidth;
+    imagePickerVc.autoDismiss = NO;
     [self presentViewController:imagePickerVc animated:YES completion:nil];
 }
 
