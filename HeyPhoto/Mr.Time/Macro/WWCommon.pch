@@ -1,0 +1,84 @@
+//
+//  WWCommon.pch
+//  Mr.Time
+//
+//  Created by 王伟伟 on 2017/4/12.
+//  Copyright © 2017年 Offape. All rights reserved.
+//
+
+#ifndef WWCommon_pch
+#define WWCommon_pch
+
+///头文件
+#import "HomeViewController.h"
+#import "UserViewController.h"
+#import "CollectViewController.h"
+#import "BookViewController.h"
+#import "RDVTabBarController.h"
+#import "SDAutoLayout.h"
+#import "WWNavigationVC.h"
+#import "NSString+WWExtra.h"
+#import "WWImageTagPHPPicker.h"
+#import "UIView+WWExt.h"
+#import "UIImage+WWExt.h"
+#import "WWGeneric.h"
+#import "WWGeneric+Application.h"
+#import "WWActionSheet.h"
+#import "Permissions.h"
+#import "XMConst.h"
+#import "XMRequest.h"
+#import "XMCenter.h"
+#import "XMEngine.h"
+#import "API.h"
+#import "WWUserModel.h"
+#import "YYModel.h"
+#import "NSObject+YYModel.h"
+
+
+#define WEAK_SELF __weak typeof(self) weakSelf = self
+#define STRONG_SELF if (!weakSelf) return; \
+__strong typeof(weakSelf) strongSelf = weakSelf
+
+#ifdef DEBUG
+#   define NSLog(...) NSLog(__VA_ARGS__)
+#else
+#   define NSLog(...)
+#endif
+
+
+#define WWUserDefault [NSUserDefaults standardUserDefaults]
+#define screenRate ( KWidth / 375.0)
+#define screenRate6P (KWidth  / 414.0)
+#define KWidth [UIScreen mainScreen].bounds.size.width
+#define KHeight [UIScreen mainScreen].bounds.size.height
+
+#define Main_Color [UIColor colorWithRed:(3)/255.0 green:(160)/255.0 blue:(235)/255.0 alpha:1.0]
+#define Main2_Color [UIColor colorWithRed:(135)/255.0 green:(202)/255.0 blue:(231)/255.0 alpha:1.0]
+#define VTColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+#define Text_Color [UIColor colorWithRed:(51)/255.0 green:(71)/255.0 blue:(113)/255.0 alpha:1.0]
+#define BackGround_Color [UIColor colorWithRed:(235)/255.0 green:(235)/255.0 blue:(241)/255.0 alpha:1.0]
+#define viewBackGround_Color [UIColor colorWithRed:(41)/255.0 green:(41)/255.0 blue:(41)/255.0 alpha:1.0]
+//*************随机色*************//
+#define RandomColor [UIColor colorWithRed:(arc4random()%255)/255.0 green:(arc4random()%255)/255.0 blue:(arc4random()%255)/255.0 alpha:1]
+//*************十六进制颜色*************//
+#define RGBCOLOR(color) [UIColor colorWithRed:(((color)>>16)&0xff)*1.0/255.0 green:(((color)>>8)&0xff)*1.0/255.0 blue:((color)&0xff)*1.0/255.0 alpha:1.0]
+//个人信息缓存路径
+#define ArchiverPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"userAccount.data"]
+///字体
+#define kFont_Bold (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"PingFangSC-Semibold" : @"AppleSDGothicNeo-Bold")
+#define kFont_Light (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"PingFangSC-Light" :  @"AppleSDGothicNeo-Light")
+#define kFont_Thin (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"PingFangSC-Thin" : @"AppleSDGothicNeo-Thin")
+#define kFont_Regular (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"PingFangSC-Regular" : @"AppleSDGothicNeo-Regular")
+#define kFont_Medium (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"PingFangSC-Medium" : @"AppleSDGothicNeo-Medium")
+#define kFont_SemiBold (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"PingFangSC-Semibold" : @"AppleSDGothicNeo-SemiBold")
+#define kFont_Avenir (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"Avenir-Medium" : @"PingFangSC-Regular")
+#define kFont_DINAlternate (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"DINAlternate-Bold" : @"PingFangSC-Regular")
+
+//*************error notify*************//
+#define kNotify_MainNavShowError @"kNotify_MainNavShowError"
+#define kNotify_MainNavShowRecomment @"kNotify_MainNavShowRecomment"
+#define kUserInfo_MainNavErrorMsg @"kUserInfo_MainNavErrorMsg"
+#define kUserInfo_MainNavErrorType @"kUserInfo_MainNavErrorType"
+#define kUserInfo_MainNavRecommentMsg @"kUserInfo_MainNavRecommentMsg"
+
+#endif /* WWCommon_pch */

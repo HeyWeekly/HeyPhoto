@@ -1,0 +1,19 @@
+platform :ios, '9.0'
+use_frameworks!
+def pods
+pod 'RDVTabBarController','~>1.1.9'
+pod 'AFNetworking','~>3.1'
+pod 'SDWebImage','~>3.8.1'
+pod 'MJRefresh','~>3.1.7'
+pod 'YYModel'
+pod 'YYText'
+pod 'YYDispatchQueuePool'
+pod 'YYAsyncLayer'
+pod 'YYImage'
+pod 'YYWebImage'
+pod 'pop', '~> 1.0'
+pod 'IQKeyboardManager'
+end
+target 'Mr.Time' do
+ pods
+end
