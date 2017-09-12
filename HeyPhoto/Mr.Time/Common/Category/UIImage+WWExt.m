@@ -10,6 +10,33 @@
 
 @implementation UIImage (WWExt)
 
+- (UIImage *)cutImageWithSize {
+    CGFloat w;
+    CGFloat h;
+    CGImageRef imageRef = NULL;
+    if (self.size.width==self.size.height) {
+        return self;
+    }else if (self.size.width>self.size.height) {
+        if (self.size.width*3/4<self.size.height) {
+            w = self.size.height;
+        }else {
+            w = self.size.height*4/3;
+        }
+        h = self.size.height;
+        imageRef = CGImageCreateWithImageInRect([self CGImage], CGRectMake(fabs(self.size.width - w) / 2, 0, w, h));
+    }else if (self.size.width<self.size.height) {
+        if (self.size.height*3/4<self.size.width) {
+            h = self.size.width;
+        }else {
+            h = self.size.width*4/3;
+        }
+        w = self.size.width;
+        imageRef = CGImageCreateWithImageInRect([self CGImage], CGRectMake(0, fabs(self.size.height - h) / 2, w, h));
+    }
+    
+    return [UIImage imageWithCGImage:imageRef];
+}
+
 + (UIImage *)imageWithView:(UIView *)view {
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0);
     [view.layer renderInContext:UIGraphicsGetCurrentContext()];

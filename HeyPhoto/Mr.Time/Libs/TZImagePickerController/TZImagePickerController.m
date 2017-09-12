@@ -128,6 +128,7 @@
     return [self initWithMaxImagesCount:maxImagesCount columnNumber:columnNumber delegate:delegate pushPhotoPickerVc:YES];
 }
 
+//构造方法
 - (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount columnNumber:(NSInteger)columnNumber delegate:(id<TZImagePickerControllerDelegate>)delegate pushPhotoPickerVc:(BOOL)pushPhotoPickerVc {
     _pushPhotoPickerVc = pushPhotoPickerVc;
     TZAlbumPickerController *albumPickerVc = [[TZAlbumPickerController alloc] init];
@@ -146,6 +147,7 @@
         self.allowTakePicture = YES;
         self.sortAscendingByModificationDate = YES;
         self.autoDismiss = YES;
+        self.goToImageEditer = YES;
         self.columnNumber = columnNumber;
         [self configDefaultSetting];
         
@@ -559,6 +561,7 @@
 @end
 
 
+#pragma mark - 相册
 @interface TZAlbumPickerController ()<UITableViewDataSource,UITableViewDelegate> {
     UITableView *_tableView;
 }

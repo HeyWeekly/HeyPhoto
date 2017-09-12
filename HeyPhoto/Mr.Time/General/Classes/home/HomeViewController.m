@@ -13,6 +13,7 @@
 #import "GCD.h"
 #import "POP.h"
 #import "SDCycleScrollView.h"
+#import "WWTagImageEditer.h"
 
 @interface HomeYearsCell :UICollectionViewCell
 @property (nonatomic,strong) UILabel *yearsNum;
@@ -24,8 +25,6 @@
 }
 @property (nonatomic, strong) UIView *animationView;
 @property (nonatomic, strong) UIButton *puslishBtn;
-@property (nonatomic, strong) NSMutableArray *originImageArray;
-@property (nonatomic, strong) NSMutableArray *cutImageArray;
 @end
 
 #define totalColumns 10
@@ -175,9 +174,6 @@
     }
 }
 
-- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto{
-    
-}
 #pragma mark - 点击事件
 - (void)publishBtnClick {
     TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:3 delegate:self];
@@ -186,7 +182,7 @@
     imagePickerVc.allowPickingVideo = NO;
     imagePickerVc.sortAscendingByModificationDate = NO;
     imagePickerVc.photoWidth = KWidth;
-    imagePickerVc.autoDismiss = NO;
+    imagePickerVc.autoDismiss = YES;
     [self presentViewController:imagePickerVc animated:YES completion:nil];
 }
 

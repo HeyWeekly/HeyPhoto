@@ -158,6 +158,14 @@
 		C0CBA63D1F5E84AC008DC3B9 /* TZProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA62C1F5E84AC008DC3B9 /* TZProgressView.m */; };
 		C0CBA63E1F5E84AC008DC3B9 /* TZVideoPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA62E1F5E84AC008DC3B9 /* TZVideoPlayerController.m */; };
 		C0CBA63F1F5E84AC008DC3B9 /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA6301F5E84AC008DC3B9 /* UIView+Layout.m */; };
+		C0CBA69E1F60F57A008DC3B9 /* WWTagImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA69D1F60F57A008DC3B9 /* WWTagImageModel.m */; };
+		C0CBA6A11F610FEC008DC3B9 /* WWTagImageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA6A01F610FEC008DC3B9 /* WWTagImageScrollView.m */; };
+		C0CBA6A71F6114F3008DC3B9 /* WWTagImageContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA6A61F6114F3008DC3B9 /* WWTagImageContainer.m */; };
+		C0CBA6AA1F611F07008DC3B9 /* WWTagImageEditer.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA6A91F611F07008DC3B9 /* WWTagImageEditer.m */; };
+		C0CBA6AD1F612B14008DC3B9 /* WWTagImageDisPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA6AC1F612B14008DC3B9 /* WWTagImageDisPlayer.m */; };
+		C0CBA6B01F61426B008DC3B9 /* WWTagImageOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA6AF1F61426B008DC3B9 /* WWTagImageOrderModel.m */; };
+		C0CBA6B31F617524008DC3B9 /* WWTagImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA6B21F617524008DC3B9 /* WWTagImageView.m */; };
+		C0CBA6B61F623764008DC3B9 /* WWTagImageLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CBA6B51F623764008DC3B9 /* WWTagImageLayer.m */; };
 		C0D48A2F1EF67EBC00B92549 /* GCDGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = C0D48A281EF67EBC00B92549 /* GCDGroup.m */; };
 		C0D48A301EF67EBC00B92549 /* GCDQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = C0D48A2A1EF67EBC00B92549 /* GCDQueue.m */; };
 		C0D48A311EF67EBC00B92549 /* GCDSemaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = C0D48A2C1EF67EBC00B92549 /* GCDSemaphore.m */; };
@@ -448,6 +456,22 @@
 		C0CBA62E1F5E84AC008DC3B9 /* TZVideoPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TZVideoPlayerController.m; sourceTree = "<group>"; };
 		C0CBA62F1F5E84AC008DC3B9 /* UIView+Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Layout.h"; sourceTree = "<group>"; };
 		C0CBA6301F5E84AC008DC3B9 /* UIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Layout.m"; sourceTree = "<group>"; };
+		C0CBA69C1F60F57A008DC3B9 /* WWTagImageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWTagImageModel.h; sourceTree = "<group>"; };
+		C0CBA69D1F60F57A008DC3B9 /* WWTagImageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWTagImageModel.m; sourceTree = "<group>"; };
+		C0CBA69F1F610FEC008DC3B9 /* WWTagImageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWTagImageScrollView.h; sourceTree = "<group>"; };
+		C0CBA6A01F610FEC008DC3B9 /* WWTagImageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWTagImageScrollView.m; sourceTree = "<group>"; };
+		C0CBA6A51F6114F3008DC3B9 /* WWTagImageContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWTagImageContainer.h; sourceTree = "<group>"; };
+		C0CBA6A61F6114F3008DC3B9 /* WWTagImageContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWTagImageContainer.m; sourceTree = "<group>"; };
+		C0CBA6A81F611F07008DC3B9 /* WWTagImageEditer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWTagImageEditer.h; sourceTree = "<group>"; };
+		C0CBA6A91F611F07008DC3B9 /* WWTagImageEditer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWTagImageEditer.m; sourceTree = "<group>"; };
+		C0CBA6AB1F612B14008DC3B9 /* WWTagImageDisPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWTagImageDisPlayer.h; sourceTree = "<group>"; };
+		C0CBA6AC1F612B14008DC3B9 /* WWTagImageDisPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWTagImageDisPlayer.m; sourceTree = "<group>"; };
+		C0CBA6AE1F61426B008DC3B9 /* WWTagImageOrderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWTagImageOrderModel.h; sourceTree = "<group>"; };
+		C0CBA6AF1F61426B008DC3B9 /* WWTagImageOrderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWTagImageOrderModel.m; sourceTree = "<group>"; };
+		C0CBA6B11F617524008DC3B9 /* WWTagImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWTagImageView.h; sourceTree = "<group>"; };
+		C0CBA6B21F617524008DC3B9 /* WWTagImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWTagImageView.m; sourceTree = "<group>"; };
+		C0CBA6B41F623764008DC3B9 /* WWTagImageLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWTagImageLayer.h; sourceTree = "<group>"; };
+		C0CBA6B51F623764008DC3B9 /* WWTagImageLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWTagImageLayer.m; sourceTree = "<group>"; };
 		C0D48A231EF67D3800B92549 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		C0D48A261EF67EBC00B92549 /* GCD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCD.h; sourceTree = "<group>"; };
 		C0D48A271EF67EBC00B92549 /* GCDGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDGroup.h; sourceTree = "<group>"; };
@@ -1003,6 +1027,22 @@
 		C0CBA6401F5EA00E008DC3B9 /* WWPictureTagsManager */ = {
 			isa = PBXGroup;
 			children = (
+				C0CBA69C1F60F57A008DC3B9 /* WWTagImageModel.h */,
+				C0CBA69D1F60F57A008DC3B9 /* WWTagImageModel.m */,
+				C0CBA69F1F610FEC008DC3B9 /* WWTagImageScrollView.h */,
+				C0CBA6A01F610FEC008DC3B9 /* WWTagImageScrollView.m */,
+				C0CBA6A51F6114F3008DC3B9 /* WWTagImageContainer.h */,
+				C0CBA6A61F6114F3008DC3B9 /* WWTagImageContainer.m */,
+				C0CBA6A81F611F07008DC3B9 /* WWTagImageEditer.h */,
+				C0CBA6A91F611F07008DC3B9 /* WWTagImageEditer.m */,
+				C0CBA6AB1F612B14008DC3B9 /* WWTagImageDisPlayer.h */,
+				C0CBA6AC1F612B14008DC3B9 /* WWTagImageDisPlayer.m */,
+				C0CBA6AE1F61426B008DC3B9 /* WWTagImageOrderModel.h */,
+				C0CBA6AF1F61426B008DC3B9 /* WWTagImageOrderModel.m */,
+				C0CBA6B11F617524008DC3B9 /* WWTagImageView.h */,
+				C0CBA6B21F617524008DC3B9 /* WWTagImageView.m */,
+				C0CBA6B41F623764008DC3B9 /* WWTagImageLayer.h */,
+				C0CBA6B51F623764008DC3B9 /* WWTagImageLayer.m */,
 			);
 			path = WWPictureTagsManager;
 			sourceTree = "<group>";
@@ -1597,7 +1637,9 @@
 				C07AC0951F42E2B800EBED61 /* XMRequest.m in Sources */,
 				C05940171EEF85FB002751FE /* WWCardSlideCell.m in Sources */,
 				C05940141EEF85A8002751FE /* WWCardSlideLayout.m in Sources */,
+				C0CBA6AD1F612B14008DC3B9 /* WWTagImageDisPlayer.m in Sources */,
 				C0D48A2F1EF67EBC00B92549 /* GCDGroup.m in Sources */,
+				C0CBA6A71F6114F3008DC3B9 /* WWTagImageContainer.m in Sources */,
 				C0CBA63B1F5E84AC008DC3B9 /* TZPhotoPreviewCell.m in Sources */,
 				C07AC03C1F3D796F00EBED61 /* UIView+SDExtension.m in Sources */,
 				C089B29C1F00F5BE00648EB4 /* UIViewExtension.swift in Sources */,
@@ -1610,6 +1652,7 @@
 				C0CBA6381F5E84AC008DC3B9 /* TZImagePickerController.m in Sources */,
 				C0CBA6341F5E84AC008DC3B9 /* TZGifPhotoPreviewController.m in Sources */,
 				C0CBA63A1F5E84AC008DC3B9 /* TZPhotoPickerController.m in Sources */,
+				C0CBA6A11F610FEC008DC3B9 /* WWTagImageScrollView.m in Sources */,
 				C089B2631EFFD0AD00648EB4 /* WWCollectBtnCircleView.m in Sources */,
 				C089B29A1F00F5BE00648EB4 /* CustomFlipTransition.swift in Sources */,
 				C0CBA6331F5E84AC008DC3B9 /* TZAssetModel.m in Sources */,
@@ -1635,12 +1678,16 @@
 				C07AC0931F42E2B800EBED61 /* XMCenter.m in Sources */,
 				C07B39A61F5D83B2001088F2 /* FMDatabaseAdditions.m in Sources */,
 				FF340B261E9E200000B4DB39 /* BookViewController.m in Sources */,
+				C0CBA69E1F60F57A008DC3B9 /* WWTagImageModel.m in Sources */,
 				C0D48A301EF67EBC00B92549 /* GCDQueue.m in Sources */,
 				C07B39A51F5D83B2001088F2 /* FMDatabase.m in Sources */,
+				C0CBA6B01F61426B008DC3B9 /* WWTagImageOrderModel.m in Sources */,
 				C07ABFDE1F3ADE6100EBED61 /* WWLoginBirthdaySetting.m in Sources */,
+				C0CBA6AA1F611F07008DC3B9 /* WWTagImageEditer.m in Sources */,
 				C0D48A971EF7B97F00B92549 /* UIScreenEx.mm in Sources */,
 				C0CBA6311F5E84AC008DC3B9 /* NSBundle+TZImagePicker.m in Sources */,
 				C0CBA6351F5E84AC008DC3B9 /* TZImageCropManager.m in Sources */,
+				C0CBA6B31F617524008DC3B9 /* WWTagImageView.m in Sources */,
 				C0D48A951EF7B97F00B92549 /* QQEngine.m in Sources */,
 				C0CBA63D1F5E84AC008DC3B9 /* TZProgressView.m in Sources */,
 				C07AC0531F3D97DD00EBED61 /* WWPhotoAlbums.m in Sources */,
@@ -1669,6 +1716,7 @@
 				C07AC0701F3DD06900EBED61 /* WWGeneric.m in Sources */,
 				C07AC03A1F3D796F00EBED61 /* SDCollectionViewCell.m in Sources */,
 				C089B25D1EFFCC7800648EB4 /* WWShareSucceedView.m in Sources */,
+				C0CBA6B61F623764008DC3B9 /* WWTagImageLayer.m in Sources */,
 				C0D48A941EF7B97F00B92549 /* MYCollectionView.m in Sources */,
 				FFBDCCCA1EE52BFF00B3AE23 /* UIView+SDAutoLayout.m in Sources */,
 				C0A69F5F1EE92DEA00DB4678 /* WWNavigationVC.m in Sources */,
