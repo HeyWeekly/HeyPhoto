@@ -147,7 +147,6 @@
         self.allowTakePicture = YES;
         self.sortAscendingByModificationDate = YES;
         self.autoDismiss = YES;
-        self.goToImageEditer = YES;
         self.columnNumber = columnNumber;
         [self configDefaultSetting];
         

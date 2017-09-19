@@ -14,6 +14,7 @@
 #import "POP.h"
 #import "SDCycleScrollView.h"
 #import "WWTagImageEditer.h"
+#import "WWImageTagPHPPicker.h"
 
 @interface HomeYearsCell :UICollectionViewCell
 @property (nonatomic,strong) UILabel *yearsNum;
@@ -25,6 +26,8 @@
 }
 @property (nonatomic, strong) UIView *animationView;
 @property (nonatomic, strong) UIButton *puslishBtn;
+@property (nonatomic, strong) NSMutableArray *originImageArray;
+@property (nonatomic, strong) NSMutableArray *cutImageArray;
 @end
 
 #define totalColumns 10
@@ -174,16 +177,29 @@
     }
 }
 
+- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto {
+    for (int i = 0; i<photos.count; i++) {
+        UIImage *image = photos[i];
+        [self.originImageArray addObject:image];
+        UIImage *newImage = [image cutImageWithSize];
+        [self.cutImageArray addObject:newImage];
+    }
+    WWTagImageEditer *imageEditerVC = [[WWTagImageEditer alloc]initWithTailoringImageArray:self.cutImageArray andWithOriginImageArray:self.originImageArray andModelArray:nil andSelectPhotoKey:nil andDidSelectPhotoKey:nil andPhotoDict:nil];
+    [self.navigationController pushViewController:imageEditerVC animated:NO];
+}
+
 #pragma mark - 点击事件
 - (void)publishBtnClick {
-    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:3 delegate:self];
-    imagePickerVc.allowPickingOriginalPhoto = YES;
-    imagePickerVc.isSelectOriginalPhoto = YES;
-    imagePickerVc.allowPickingVideo = NO;
-    imagePickerVc.sortAscendingByModificationDate = NO;
-    imagePickerVc.photoWidth = KWidth;
-    imagePickerVc.autoDismiss = YES;
-    [self presentViewController:imagePickerVc animated:YES completion:nil];
+//    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:3 delegate:self];
+//    imagePickerVc.allowPickingOriginalPhoto = YES;
+//    imagePickerVc.isSelectOriginalPhoto = YES;
+//    imagePickerVc.allowPickingVideo = NO;
+//    imagePickerVc.sortAscendingByModificationDate = NO;
+//    imagePickerVc.photoWidth = KWidth;
+//    imagePickerVc.autoDismiss = YES;
+//    [self presentViewController:imagePickerVc animated:YES completion:nil];
+    WWImageTagPHPPicker *imageVC = [[WWImageTagPHPPicker alloc]init];
+    [self.navigationController pushViewController:imageVC animated:YES];
 }
 
 #pragma mark - lazyLoad
@@ -194,6 +210,20 @@
         [_puslishBtn addTarget:self action:@selector(publishBtnClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _puslishBtn;
+}
+
+- (NSMutableArray *)originImageArray {
+    if (!_originImageArray) {
+        _originImageArray = [NSMutableArray arrayWithCapacity:10];
+    }
+    return _originImageArray;
+}
+
+- (NSMutableArray *)cutImageArray {
+    if (_cutImageArray == nil) {
+        _cutImageArray = [NSMutableArray arrayWithCapacity:10];
+    }
+    return _cutImageArray;
 }
 
 @end

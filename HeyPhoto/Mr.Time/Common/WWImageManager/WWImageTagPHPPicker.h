@@ -18,7 +18,4 @@
 @interface WWImageTagPHPPicker : WWRootViewController
 @property (nonatomic, weak) id <WWImageTagPHPPickerDelegate> delegate;
 @property (nonatomic, copy) void(^cropBlock)(UIImage *image);
-@property (nonatomic, assign) BOOL isBackNeedImageArray;
-@property (nonatomic, assign) NSInteger count;
-@property (nonatomic, assign) NSInteger maxCount;
 @end

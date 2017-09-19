@@ -7,15 +7,15 @@
 //
 
 #import "WWImageTagPHPPicker.h"
+#import "WWTagImageEditer.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "WWPhotoAlbums.h"
 #import "Permissions.h"
+#import "WWTagImageModel.h"
+#import "WWAlbumTitle.h"
 
 @import Photos;
 @import PhotosUI;
-
-#define ALERT_MSG(msg) static UIAlertView *alert; alert = [[UIAlertView alloc] initWithTitle:L10NString(@"Hint") message:msg delegate:self cancelButtonTitle:L10NString(@"confirm") otherButtonTitles:nil, nil];\
-[alert show];\
 
 @interface WWImgalbumNameCell : UITableViewCell
 @property (nonatomic, strong) UIImageView *onoImage;
@@ -32,19 +32,19 @@
 @property (nonatomic, assign) BOOL isSelected;
 @end
 
-@interface WWImageTagPHPPicker ()<UICollectionViewDelegate,UICollectionViewDataSource,UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
-@property (nonatomic, strong) UIView *nav;
-@property (nonatomic, strong) UIImageView *maskView;
+@interface WWImageTagPHPPicker ()<UICollectionViewDelegate,UICollectionViewDataSource,UITableViewDelegate,UITableViewDataSource,WWTagImageEditerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@property (nonatomic, strong) WWNavigationVC *nav;
+@property (nonatomic, strong) WWAlbumTitle *albumTileLabel;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UITableView *albumNameTable;
 @property (nonatomic, strong) UIView *albumMaskView;
-@property (nonatomic, strong) UILabel *navTitleLabel;
 // current album
 @property (nonatomic, strong) PHAssetCollection* currentColletion;
 @property (nonatomic, strong) NSMutableArray *originImageArray;
 @property (nonatomic, strong) NSMutableArray *tailoringImageArr;
 // title右边的图
 @property (nonatomic, strong) UIImageView *imagePicker;
+@property (nonatomic, strong) WWTagImageModel *model;
 @property (nonatomic, strong) NSMutableArray<WWPhotoAlbums *> *albumsArray;
 @property (nonatomic, strong) NSMutableArray <PHAsset *> *currentResult;
 ///是否允许使用相机
@@ -66,15 +66,22 @@
 @end
 
 @implementation WWImageTagPHPPicker
-#pragma mark - 初始化部分
+
+#pragma mark - 构造方法
 - (instancetype)init {
     if (self = [super init]) {
         self.isPop = NO;
         self.isOneEnter = YES;
-        [self.view setBackgroundColor:[UIColor whiteColor]];
+        self.view.backgroundColor = viewBackGround_Color;
+        
+        
         [self.view addSubview:self.collectionView];
-        [self.view addSubview:self.nav];
+        [self.view addSubview:self.albumMaskView];
         [self.view addSubview:self.albumNameTable];
+        
+        [self.view addSubview:self.nav];
+        [self.view addSubview:self.albumTileLabel];
+        
         self.originImageArray = [NSMutableArray arrayWithCapacity:9];
         self.tailoringImageArr = [NSMutableArray arrayWithCapacity:9];
         self.selectPhotoKey = [NSMutableArray arrayWithCapacity:9];
@@ -87,16 +94,32 @@
     return self;
 }
 
-#pragma mark - 视图生命周期
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (instancetype)initWithModel:(WWTagImageModel *)modelArray andTailoringImageArray:(NSArray *)tailoringImageArray andoriginImageArray:(NSArray *)originImageArray andSelectPhotoKey:(NSArray *)selectPhotoKey andPhotoDict:(NSDictionary *)photoDict {
+    if (self = [super init]) {
+        self.isOneEnter = NO;
+        self.isPop = NO;
+        self.view.backgroundColor = viewBackGround_Color;
+        [self.view addSubview:self.collectionView];
+        [self.view addSubview:self.nav];
+        [self.view addSubview:self.albumTileLabel];
+        [self.view addSubview:self.albumNameTable];
+        self.originImageArray = [NSMutableArray arrayWithArray:originImageArray];
+        self.tailoringImageArr = [NSMutableArray arrayWithArray:tailoringImageArray];
+        self.selectPhotoKey = [NSMutableArray arrayWithArray:selectPhotoKey];
+        self.didSelectPhotoKey = [NSArray arrayWithArray:selectPhotoKey];
+        self.photoDict = [NSMutableDictionary dictionaryWithDictionary:photoDict];
+        [self loadPhotos];
+        self.currentColletion = (PHAssetCollection*)self.albumsArray.firstObject.assetCollection;
+        [self.collectionView reloadData];
+        [self.albumNameTable reloadData];
+        self.model = modelArray;
+    }
+    return self;
 }
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.isPop = YES;
-}
-- (void)viewDidLoad {
-    [super viewDidLoad];
 }
 
 #pragma mark - 图片加载
@@ -147,6 +170,7 @@
     }];
     return mArr;
 }
+
 - (PHFetchResult *)fetchAssetsInAssetCollection:(PHAssetCollection *)assetCollection ascending:(BOOL)ascending
 {
     PHFetchOptions *options = [[PHFetchOptions alloc] init];
@@ -154,7 +178,12 @@
     PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
     return result;
 }
+
 #pragma mark - set方法
+- (void)setModel:(WWTagImageModel *)model {
+    _model = model;
+}
+
 - (void)setCurrentColletion:(PHAssetCollection *)currentColletion{
     _currentColletion = currentColletion;
     if ([currentColletion isEqual:(PHAssetCollection *)self.albumsArray.firstObject.assetCollection]) {
@@ -170,9 +199,7 @@
         }
     }];
     self.currentResult = mArr;
-    self.navTitleLabel.text = _currentColletion.localizedTitle;
-    [self.navTitleLabel sizeToFit];
-    _imagePicker.left = self.navTitleLabel.right+3;
+    [self.albumTileLabel setTitle:_currentColletion.localizedTitle forState:UIControlStateNormal];;
 }
 
 #pragma mark - collectionViewDataSource
@@ -183,16 +210,17 @@
         return self.currentResult.count;
     }
 }
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (self.isCamera) {
         if (indexPath.row == 0) {
             static NSString *CellIdentifier = @"UICollectionViewCellsim";
             UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-            UIImageView *img = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"zhaoxiangji"]];
+            UIImageView *img = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"compose_photo_photograph@2x"]];
             img.clipsToBounds = YES;
             img.center = cell.contentView.center;
             [cell.contentView addSubview:img];
-            cell.backgroundColor = [UIColor redColor];
+            cell.backgroundColor = [UIColor whiteColor];
             return cell;
         }else {
             static NSString *CellIdentifier = @"TWPhotoCollectionViewCellOne";
@@ -256,23 +284,16 @@
         if (indexPath.row != 0) {
             WWImgTagPHPickerCell* cell = (WWImgTagPHPickerCell*)[collectionView cellForItemAtIndexPath:indexPath];
             if ([self.didSelectPhotoKey containsObject:cell.representedAssetIdentifier] && self.isOneEnter == NO) {
-#warning 图片已在编辑列表中
+                [WWHUD showMessage:@"图片已在编辑列表中" inView:self.view];
             }else {
                 if ([self.selectPhotoKey containsObject:cell.representedAssetIdentifier]) {
                     [self.selectPhotoKey removeObject:cell.representedAssetIdentifier];
-                    self.count = self.count -1;
                     [self.photoDict removeObjectForKey:cell.representedAssetIdentifier];
                     self.isCancelPhoto = YES;
                     [cell setIsSelected:NO];
                 }else {
                     if (self.selectPhotoKey.count != 9) {
-                        if (self.count == self.maxCount) {
-                            NSString *msg = [NSString stringWithFormat:@"%@ %lu %@",@"最多选择",(unsigned long)self.maxCount,@"张照片"];
-#warning @"最多选择"
-                            return;
-                        }
                         [self.selectPhotoKey addObject:cell.representedAssetIdentifier];
-                        self.count = self.count+1;
                         NSInteger number = self.currentResult.count - (indexPath.row);
                         PHAsset* asset = self.currentResult[number];
                         PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
@@ -287,8 +308,8 @@
                         }];
                         [cell setIsSelected:YES];
                     }else{
-                        NSString *msg = [NSString stringWithFormat:@"%@ %lu %@",@"最多选择",(unsigned long)self.selectPhotoKey.count,@"张照片"];
-#warning @"最多选择"
+                        NSString *msg = [NSString stringWithFormat:@"%@ %lu %@",@"最多选择",(unsigned long)self.selectPhotoKey.count,@"张图片"];
+                        [WWHUD showMessage:msg inView:self.view];
                         return;
                     }
                 }
@@ -312,23 +333,16 @@
     }else {
         WWImgTagPHPickerCell* cell = (WWImgTagPHPickerCell*)[collectionView cellForItemAtIndexPath:indexPath];
             if ([self.didSelectPhotoKey containsObject:cell.representedAssetIdentifier] && self.isOneEnter == NO) {
-#warning 图片已在编辑列表中
+                [WWHUD showMessage:@"图片已在编辑列表中" inView:self.view];
             }else {
                 if ([self.selectPhotoKey containsObject:cell.representedAssetIdentifier]) {
                     [self.selectPhotoKey removeObject:cell.representedAssetIdentifier];
-                    self.count = self.count -1;
                     [self.photoDict removeObjectForKey:cell.representedAssetIdentifier];
                     self.isCancelPhoto = YES;
                     [cell setIsSelected:NO];
                 }else {
                     if (self.selectPhotoKey.count != 9) {
-                        if (self.count == self.maxCount) {
-                            NSString *msg = [NSString stringWithFormat:@"%@ %lu %@",@"最多选择",(unsigned long)self.maxCount,@"张照片"];
-#warning @"最多选择"
-                            return;
-                        }
                         [self.selectPhotoKey addObject:cell.representedAssetIdentifier];
-                        self.count = self.count+1;
                         PHAsset* asset = self.currentResult[indexPath.row];
                         PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
                         options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat; //I only want the highest possible quality
@@ -342,14 +356,15 @@
                         }];
                         [cell setIsSelected:YES];
                     }else{
-                        NSString *msg = [NSString stringWithFormat:@"%@ %lu %@",@"最多选择",(unsigned long)self.selectPhotoKey.count,@"张照片"];
-                        #warning @"最多选择"
+                        NSString *msg = [NSString stringWithFormat:@"%@ %lu %@",@"最多选择",(unsigned long)self.selectPhotoKey.count,@"张图片"];
+                        [WWHUD showMessage:msg inView:self.view];
                         return;
                     }
                 }
             }
     }
 }
+
 #pragma mark - tableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.albumsArray.count;
@@ -371,22 +386,25 @@
         }else {}
     }];
     cell.albumName.text = album.albumName;
-    cell.albumCount.text = [NSString stringWithFormat:@"%ld%@", (unsigned long)album.albumImageCount,@"张"];
+    cell.albumCount.text = [NSString stringWithFormat:@"%ld%@", (unsigned long)album.albumImageCount,@"张图片"];
     return cell;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     PHAssetCollection* collection = (PHAssetCollection*)[self.albumsArray objectAtIndex:indexPath.row].assetCollection;
     self.currentColletion = collection;
     [self.albumNameTable reloadData];
     [self.collectionView reloadData];
-    [self dismissAlbumMaskView];
+    [self pushAlbumList:self.albumTileLabel];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.albumNameTable deselectRowAtIndexPath:indexPath animated:NO];
     });
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 100*screenRate;
+    return 80*screenRate;
 }
+
 #pragma mark - 相机
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     if ([[info objectForKey:UIImagePickerControllerMediaType] isEqualToString:(__bridge NSString *)kUTTypeImage]){
@@ -398,15 +416,17 @@
     }
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
+
 //这个地方只做一个提示的功能
 - (void)image:(UIImage*)image didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo
 {
     if (error) {
-#warning 图片存储失败
+        [WWHUD showMessage:@"图片存储失败" inView:self.view];
     }else{
         [self performSelector:@selector(addNewPicture)  withObject:image afterDelay:0.5];
     }
 }
+
 - (void)addNewPicture {
     PHAssetCollection* collection = (PHAssetCollection*)self.albumsArray.firstObject.assetCollection;
     self.currentColletion = collection;
@@ -414,9 +434,11 @@
     [self.albumNameTable reloadData];
     [self.collectionView reloadData];
 }
+
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
+
 #pragma mark - 图片裁剪逻辑
 - (void)cropAction {
     if (self.selectPhotoKey.count == 0) {
@@ -428,7 +450,9 @@
         [self.originImageArray removeAllObjects];
         for (int i = 0; i<self.photoDict.count; i++) {
             UIImage *image = [self.photoDict valueForKey:self.selectPhotoKey[i]];
-            [self.tailoringImageArr addObject:image];
+            [self.originImageArray addObject:image];
+            UIImage *newImage = [image cutImageWithSize];
+            [self.tailoringImageArr addObject:newImage];
         }
     }else{
             NSInteger count = self.selectPhotoKey.count - self.didSelectPhotoKey.count;
@@ -439,74 +463,102 @@
                 UIImage *image = [self.photoDict valueForKey:marray[i]];
                 if (![self.originImageArray containsObject:image]) {
                     [self.originImageArray addObject:image];
-                    [self.tailoringImageArr addObject:image];
+                    UIImage *newImage = [image cutImageWithSize];
+                    [self.tailoringImageArr addObject:newImage];
                 }
             }
     }
-    if (self.isBackNeedImageArray == NO) {
-    }else {
-        if ([self.delegate respondsToSelector:@selector(photoPickerController:)]) {
-            [self.delegate photoPickerController:self.originImageArray];
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    }
+    
+        WWTagImageEditer* editer = [[WWTagImageEditer alloc] initWithTailoringImageArray:self.tailoringImageArr andWithOriginImageArray:self.originImageArray andModelArray:self.model andSelectPhotoKey:self.selectPhotoKey andDidSelectPhotoKey:self.didSelectPhotoKey andPhotoDict:self.photoDict];
+        editer.delegate = self;
+    [self.navigationController pushViewController:editer animated:YES];
 }
+
 #pragma mark - 点击方法
-- (void)titleLabelClicked{
-    if (!self.albumMaskView) {
-        self.albumMaskView = [UIView new];
-        self.albumMaskView.backgroundColor = [RGBCOLOR(0x000000) colorWithAlphaComponent:0.3];
-        self.albumMaskView.alpha = 0;
-        self.albumMaskView.frame = CGRectMake(0, 44, KWidth, KHeight - 44);
-        [self.view insertSubview:self.albumMaskView belowSubview:self.albumNameTable];
-        [UIView animateWithDuration:0.4 animations:^{
-            self.albumNameTable.alpha = 1.0;
-            self.albumMaskView.alpha = 1.0;
-        } completion:^(BOOL finished) {
-            [self.albumMaskView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissAlbumMaskView)]];
-        }];
-    }else{
-        [self dismissAlbumMaskView];
-    }
+- (void)backto {
+    [self.navigationController popViewControllerAnimated:YES];
 }
-- (void)dismissAlbumMaskView{
-    self.albumMaskView.userInteractionEnabled = NO;
-    [UIView animateWithDuration:0.4 animations:^{
-        self.albumNameTable.alpha = 0.0;
-        self.albumMaskView.alpha = 0.0;
-    } completion:^(BOOL finished) {
-        [self.albumMaskView removeFromSuperview];
-        self.albumMaskView = nil;
-    }];
+
+- (void)didAlbumsBgViewClick {
+    [self pushAlbumList:self.albumTileLabel];
+}
+
+#pragma mark - delegate
+- (void)tagedImgEditerWantPoped:(WWTagImageEditer *)editer{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - 懒加载
-- (UIView *)nav{
-    if (_nav == nil) {
-        CGRect rect = CGRectMake(0, 0, 150, 44);
-        UIView *navView = [[UIView alloc] initWithFrame:rect];
-        navView.backgroundColor = [UIColor clearColor];
-        UILabel *titleLabel = [[UILabel alloc] init];
-        titleLabel.text = @"相机胶卷";
-        titleLabel.textAlignment = NSTextAlignmentLeft;
-        titleLabel.backgroundColor = [UIColor clearColor];
-        titleLabel.textColor = [UIColor blackColor];
-        titleLabel.font = [UIFont fontWithName:kFont_Regular size:18];
-        [titleLabel sizeToFit];
-        titleLabel.center = navView.center;
-        [navView addSubview:titleLabel];
-        titleLabel.userInteractionEnabled = YES;
-        self.navTitleLabel = titleLabel;
-        [titleLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(titleLabelClicked)]];
-        _imagePicker = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"imagePicker"]];
-        _imagePicker.frame = CGRectMake(titleLabel.right+3, 18, 9, 15);
-        _imagePicker.contentMode = UIViewContentModeCenter;
-        _imagePicker.centerY = titleLabel.centerY;
-        [navView addSubview:_imagePicker];
-        _nav = navView;
+- (WWNavigationVC *)nav {
+    if (!_nav) {
+        _nav = [[WWNavigationVC alloc]initWithFrame:CGRectMake(0, 0, KWidth, 44)];
+        _nav.backgroundColor = viewBackGround_Color;
+        _nav.navTitle.text = nil;
+        _nav.rightBtn.hidden = NO;
+        [_nav.backBtn addTarget:self action:@selector(backto) forControlEvents:UIControlEventTouchUpInside];
+        _nav.rightName = @"下一步";
+        _nav.rightColor = [UIColor whiteColor];
+        [_nav.rightBtn addTarget:self action:@selector(cropAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _nav;
 }
+
+- (WWAlbumTitle *)albumTileLabel {
+    if (_albumTileLabel == nil) {
+        _albumTileLabel = [WWAlbumTitle buttonWithType:UIButtonTypeCustom];
+        _albumTileLabel.frame = CGRectMake((KWidth-270), 11, 150, 30);
+        [_albumTileLabel setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_albumTileLabel setImage:[UIImage imageNamed:@"albumxiala"] forState:UIControlStateNormal];
+        [_albumTileLabel setTitle:@"相机胶卷" forState:UIControlStateNormal];
+        _albumTileLabel.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [_albumTileLabel addTarget:self action:@selector(pushAlbumList:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _albumTileLabel;
+}
+
+- (UIView *)albumMaskView {
+    if (!_albumMaskView) {
+        _albumMaskView = [[UIView alloc] initWithFrame:CGRectMake(0, 44, KWidth, KHeight - 44)];
+        _albumMaskView.hidden = YES;
+        _albumMaskView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
+        _albumMaskView.alpha = 0;
+        [_albumMaskView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didAlbumsBgViewClick)]];
+    }
+    return _albumMaskView;
+}
+
+
+- (void)pushAlbumList:(UIButton *)button {
+    button.selected = !button.selected;
+    button.userInteractionEnabled = NO;
+    if (button.selected) {
+        self.albumMaskView.hidden = NO;
+        [UIView animateWithDuration:0.2 animations:^{
+            self.albumNameTable.frame = CGRectMake(0, 44, self.view.frame.size.width, 340);
+            button.imageView.transform = CGAffineTransformMakeRotation(M_PI);
+        } completion:^(BOOL finished) {
+            button.userInteractionEnabled = YES;
+        }];
+        [UIView animateWithDuration:0.45 animations:^{
+            self.albumMaskView.alpha = 1;
+        }];
+    }else {
+        
+        [UIView animateWithDuration:0.45 animations:^{
+            self.albumMaskView.alpha = 0;
+        } completion:^(BOOL finished) {
+            self.albumMaskView.hidden = YES;
+            button.userInteractionEnabled = YES;
+        }];
+        [UIView animateWithDuration:0.25 animations:^{
+            self.albumNameTable.frame = CGRectMake(0, -340, self.view.frame.size.width, 340);
+            button.imageView.transform = CGAffineTransformMakeRotation(M_PI * 2);
+        } completion:^(BOOL finished) {
+
+        }];
+    }
+}
+
 - (UICollectionView *)collectionView {
     if (_collectionView == nil) {
         CGFloat colum = 3, spacing = 6*screenRate;
@@ -517,12 +569,12 @@
         layout.minimumInteritemSpacing      = spacing;
         layout.minimumLineSpacing           = spacing;
         //所有图片的放置的collectionView
-        CGRect rect = CGRectMake(0, 0, KWidth, KHeight);
+        CGRect rect = CGRectMake(0, 44, KWidth, KHeight-44);
         _collectionView = [[UICollectionView alloc] initWithFrame:rect collectionViewLayout:layout];
         _collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
-        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.backgroundColor = viewBackGround_Color;
         [_collectionView registerClass:[WWImgTagPHPickerCell class] forCellWithReuseIdentifier:@"TWPhotoCollectionViewCellOne"];
         [_collectionView registerClass:[WWImgTagPHPickerCell class] forCellWithReuseIdentifier:@"TWPhotoCollectionViewCellTwo"];
         [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"UICollectionViewCellsim"];
@@ -532,37 +584,22 @@
 
 - (UITableView *)albumNameTable{
     if (!_albumNameTable) {
-        _albumNameTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 44, KWidth,KHeight-44)];
+        _albumNameTable = [[UITableView alloc] initWithFrame:CGRectMake(0, -340, KWidth,340)];
         _albumNameTable.dataSource = self;
         _albumNameTable.delegate = self;
         _albumNameTable.showsVerticalScrollIndicator = NO;
         _albumNameTable.showsHorizontalScrollIndicator = NO;
         [_albumNameTable registerClass:[WWImgalbumNameCell class] forCellReuseIdentifier:@"WWImgalbumNameCell"];
-        _albumNameTable.alpha = 0;
         _albumNameTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     return _albumNameTable;
 }
 
-- (UIView *)rightItemView {
-    UIButton *goBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [goBtn setTitle:@"完成" forState:UIControlStateNormal];
-    [goBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    goBtn.titleLabel.font = [UIFont fontWithName:kFont_Regular size:14];
-    [goBtn addTarget:self action:@selector(cropAction) forControlEvents:UIControlEventTouchUpInside];
-    return goBtn;
-}
-- (UIView *)titleView {
-    return self.nav;
-}
-#pragma mark - 固定方法
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
 @end
+
 
 @implementation WWImgTagPHPickerCell
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -580,6 +617,7 @@
     NSString *imageName = isSelected ? @"sy_photo-selected":@"sy_photo-normal";
     _circleImage.image = [UIImage imageNamed:imageName];
 }
+
 #pragma mark - 懒加载
 - (UIImageView *)imageView {
     if (_imageView == nil) {
@@ -616,7 +654,7 @@
 }
 - (UIImageView *)onoImage {
     if (_onoImage == nil) {
-        _onoImage = [[UIImageView alloc]initWithFrame:CGRectMake(10*screenRate, 10*screenRate, 80*screenRate, 80*screenRate)];
+        _onoImage = [[UIImageView alloc]initWithFrame:CGRectMake(10*screenRate, 10*screenRate, 50*screenRate, 50*screenRate)];
         _onoImage.contentMode = UIViewContentModeScaleAspectFill;
         _onoImage.clipsToBounds = YES;
     }
@@ -624,25 +662,25 @@
 }
 - (UILabel *)albumName {
     if (_albumName == nil) {
-        _albumName = [[UILabel alloc]initWithFrame:CGRectMake(105*screenRate, 25*screenRate, 100*screenRate, 24*screenRate)];
-        _albumName.textColor = [UIColor blackColor];
-        _albumName.font = [UIFont fontWithName:kFont_Regular size:16*screenRate];
+        _albumName = [[UILabel alloc]initWithFrame:CGRectMake(75*screenRate, 12*screenRate, 100*screenRate, 20*screenRate)];
+        _albumName.textColor = RGBCOLOR(0x292929);
+        _albumName.font = [UIFont fontWithName:kFont_Regular size:14*screenRate];
         _albumName.textAlignment = NSTextAlignmentLeft;
     }
     return _albumName;
 }
 - (UILabel *)albumCount {
     if (_albumCount == nil) {
-        _albumCount = [[UILabel alloc]initWithFrame:CGRectMake(105*screenRate, (self.albumName.frame.size.height+self.albumName.frame.origin.y+5*screenRate), 100*screenRate, 24*screenRate)];
-        _albumCount.textColor = [UIColor lightGrayColor];
-        _albumCount.font = [UIFont fontWithName:kFont_Regular size:16*screenRate];
+        _albumCount = [[UILabel alloc]initWithFrame:CGRectMake(75*screenRate, (self.albumName.frame.size.height+self.albumName.frame.origin.y+5*screenRate), 100*screenRate, 20*screenRate)];
+        _albumCount.textColor = RGBCOLOR(0x999999);
+        _albumCount.font = [UIFont fontWithName:kFont_Regular size:13*screenRate];
         _albumCount.textAlignment = NSTextAlignmentLeft;
     }
     return _albumCount;
 }
 - (UIView *)lineView {
     if (_lineView == nil) {
-        _lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 99*screenRate, KWidth, 1)];
+        _lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 79*screenRate, KWidth, 1)];
         _lineView.backgroundColor = RGBCOLOR(0xE8E8E8);
     }
     return _lineView;

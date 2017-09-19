@@ -10,14 +10,13 @@
 
 @interface WWTagImageLayer ( ) <UITextFieldDelegate>
 @property (nonatomic, strong) id model;
-@property (nonatomic, strong) UIButton *cardCarousel;
+@property (nonatomic, strong) UIImageView *cardCarousel;
 @property (nonatomic, strong) UIView  *containerView;
 @property (nonatomic, strong) NSArray<id>*modelArray;
 @property (nonatomic, strong) UIButton *close;
 @property (nonatomic, strong) UIBlurEffect *effect;
 @property (nonatomic, strong) UIVisualEffectView *effectView;
 @property (nonatomic, strong) NSArray *imageArray;
-@property (nonatomic, strong) UIImageView *searchImage;
 @property (nonatomic, strong) UIView *searchLine;
 @property (nonatomic, strong) UITextField* inputView;
 @property (nonatomic, strong) UIButton *doneBtn;
@@ -59,23 +58,36 @@
 - (void)setUpSubviews {
     [self addSubview:self.effectView];
     [self addSubview:self.cardCarousel];
-    [self addSubview:self.close];
-    [self.close sizeToFit];
-    self.close.centerX = KWidth/2;
-    self.close.bottom = self.bottom - 60;
-    self.close.width = 120*screenRate;
-    self.close.height = 33*screenRate;
     
-    [self addSubview:self.searchImage];
+    self.searchLine.left = 80*screenRate;
+    self.searchLine.top = self.cardCarousel.bottom + 60*screenRate;
+    self.searchLine.height = 1;
+    self.searchLine.width = KWidth - 160*screenRate;
     [self addSubview:self.searchLine];
+    
+    self.inputView.left = 80*screenRate;
+    self.inputView.top = self.cardCarousel.bottom + 25*screenRate;
+    self.inputView.height = 35*screenRate;
+    self.inputView.width = KWidth - 160*screenRate;
     [self addSubview:self.inputView];
+    
+    self.close.left = 80*screenRate;
+    self.close.top = self.searchLine.bottom+60*screenRate;
+    self.close.width = 80*screenRate;
+    self.close.height = 33*screenRate;
+    [self addSubview:self.close];
+    
+    self.doneBtn.left = 160*screenRate+(self.searchLine.width - 160*screenRate);
+    self.doneBtn.top = self.close.top;
+    self.doneBtn.width = 80*screenRate;
+    self.doneBtn.height = 33*screenRate;
     [self addSubview:self.doneBtn];
     
 }
 
 - (void)setImageArray:(NSArray *)imageArray {
     _imageArray = imageArray;
-    [self.cardCarousel setImage:self.imageArray.firstObject forState:UIControlStateNormal];;
+    self.cardCarousel.image = self.imageArray.firstObject;
 }
 
 #pragma mark - 代理
@@ -84,6 +96,8 @@
         if ([self.delegate respondsToSelector:@selector(tagDoneText:)]) {
             [self.delegate tagDoneText:self.inputView.text];
         }
+    }else {
+        [WWHUD showMessage:@"无输入内容，请点击关闭按钮" inView:self afterDelayTime:1.5f];
     }
 }
 
@@ -188,10 +202,11 @@
 }
 
 #pragma mark - lazyload
-- (UIButton *)cardCarousel {
+- (UIImageView *)cardCarousel {
     if (!_cardCarousel) {
-        _cardCarousel = [[UIButton alloc]initWithFrame:CGRectMake(32*screenRate, 44, KWidth - 64*screenRate, 389*screenRate)];
-        _cardCarousel.contentMode = UIViewContentModeScaleAspectFit;
+        _cardCarousel = [[UIImageView alloc]initWithFrame:CGRectMake(32*screenRate, 44, KWidth - 64*screenRate, 375*screenRate)];
+        _cardCarousel.contentMode = UIViewContentModeScaleAspectFill;
+        _cardCarousel.clipsToBounds = YES;
     }
     return _cardCarousel;
 }
@@ -228,33 +243,25 @@
 - (UIView *)searchLine {
     if (_searchLine == nil) {
         _searchLine = [[UIView alloc]init];
-        _searchLine.backgroundColor = RGBCOLOR(0xDDDDDD);
+        _searchLine.backgroundColor = RGBCOLOR(0x333333);
     }
     return _searchLine;
-}
-
-- (UIImageView *)searchImage {
-    if (_searchImage == nil) {
-        _searchImage = [[UIImageView alloc]init];
-        _searchImage.image = [UIImage imageNamed:@"importImage"];
-    }
-    return _searchImage;
 }
 
 - (UITextField *)inputView{
     if (_inputView == nil) {
         _inputView = [[UITextField alloc] init];
         _inputView.tintColor = RGBCOLOR(0x333333);
-        _inputView.font = [UIFont fontWithName:kFont_Regular size:14*screenRate];
+        _inputView.font = [UIFont fontWithName:kFont_Bold size:15*screenRate];
         _inputView.textColor = RGBCOLOR(0x333333);
+        _inputView.placeholder = @"请输入标签内容";
+        _inputView.textAlignment = NSTextAlignmentCenter;
+        _inputView.keyboardType = UIKeyboardTypeDefault;
+        _inputView.keyboardAppearance = UIKeyboardAppearanceDark;
+        _inputView.returnKeyType = UIReturnKeyDone;
         _inputView.adjustsFontSizeToFitWidth = YES;
         _inputView.delegate = self;
-        _inputView.textAlignment = NSTextAlignmentLeft;
-        _inputView.placeholder = @"请输入标签内容";
-        _inputView.keyboardType = UIKeyboardTypeDefault;
-        UIView* accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 1 / [UIScreen mainScreen].scale)];
-        accessoryView.backgroundColor = [UIColor grayColor];
-        _inputView.inputAccessoryView = accessoryView;
+
     }
     return _inputView;
 }

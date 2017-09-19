@@ -94,9 +94,6 @@
 /// 默认为YES，如果设置为NO, 选择器将不会自己dismiss
 @property(nonatomic, assign) BOOL autoDismiss;
 
-///默认为YES，选择器跳转到图片编辑器将不会自动dismiss
-@property(nonatomic, assign) BOOL goToImageEditer;
-
 /// The photos user have selected
 /// 用户选中过的图片数组
 @property (nonatomic, strong) NSMutableArray *selectedAssets;

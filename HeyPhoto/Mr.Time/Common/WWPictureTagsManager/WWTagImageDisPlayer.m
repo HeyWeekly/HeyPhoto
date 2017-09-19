@@ -183,10 +183,7 @@
     if ([self.delegate respondsToSelector:@selector(displayer:canAddTagWithGesture:)]) {
         BOOL canAddTag = [self.delegate displayer:self canAddTagWithGesture:self.tap];
         if (self.modelArray.tagImagesList[didImageViewTag.tag].tags.count >= 5) {
-#warning 提示消息
-//            [HUDTools showText:L10NString(@"zuiduotianjia5febiaoqian") withView:self withDelay:1];
-//            [HUDTools removeHUD];
-            return;
+            [WWHUD showMessage:@"最多添加五个标签" inView:self];            return;
         }
         if (canAddTag) {
             self.didImageView = (UIImageView *)tap.view;
@@ -214,60 +211,59 @@
     
     if (longPre.state == UIGestureRecognizerStateEnded) {
         if (self.modelArray.tagImagesList[imageView.tag].tags.count >0 ) {
-#warning 提示
-//            YKAlertView *alertView = [[YKAlertView alloc] initWithTitle:L10NString(@"chongxincaijianzhaopianhou")andText:nil andCancel:NO];
-//            [alertView show:YES];
+            WWActionSheet *actionSheet = [[WWActionSheet alloc] initWithTitle:@"图片裁剪后标签需要重新添加"];
+            WWActionSheetAction *action = [WWActionSheetAction actionWithTitle:@"裁剪" handler:^(WWActionSheetAction *action) {
+                WWTagImageContainer *vc = [[WWTagImageContainer alloc] initWithImage:self.originImageArray[imageView.tag]];
+                vc.frame = [UIScreen mainScreen].bounds;
+                vc.resultImageBlock = ^(UIImage *image) {
+                    NSArray <WWTagedImgLabel *> *labelModel = self.modelArray.tagImagesList[imageView.tag].tags;
+                    NSMutableArray *mArray = [NSMutableArray arrayWithArray:labelModel];
+                    if (mArray.count != 0) {
+                        NSInteger j = mArray.count;
+                        for (int i = 0; i < j; i++) {
+                            [mArray removeObjectAtIndex:0];
+                        }
+                        labelModel = mArray.copy;
+                    }else {
+                        labelModel = nil;
+                    }
+                    self.modelArray.tagImagesList[imageView.tag].tags = labelModel;
+                    for (UIView *subviews in [imageView subviews]) {
+                        if ([[subviews class] isSubclassOfClass:[WWTagImageView class]]) {
+                            [subviews removeFromSuperview];
+                        }
+                    }
+                    ((UIImageView*)longPre.view).image = image;
+                    long int tag = imageView.tag;
+                    
+                    if (image.size.width==image.size.height) {
+                        imageView.frame = CGRectMake(0, 0, KWidth, KWidth);
+                    }else if (image.size.width>image.size.height) {
+                        if (image.size.width-image.size.height<image.size.height/4) {
+                            imageView.frame = CGRectMake(0, 0, KWidth, KWidth);
+                        }else {
+                            imageView.frame = CGRectMake(0, KWidth/8, KWidth, KWidth*3/4);
+                        }
+                    }else if (image.size.width<image.size.height) {
+                        if (image.size.height-image.size.width<image.size.width/4) {
+                            imageView.frame = CGRectMake(0, 0, KWidth, KWidth);
+                        }else{
+                            imageView.frame = CGRectMake(KWidth/8, 0, KWidth*3/4, KWidth);
+                        }
+                    }
+                    [self.scrollView inputView];
+                    NSMutableArray *muArr = [NSMutableArray arrayWithArray:self.imageArray.mutableCopy];
+                    muArr[tag] = image;
+                    WWTagedImgListModel *sortModel = self.modelArray.tagImagesList[tag];
+                    sortModel.image = image;
+                    self.imageArray = muArr.copy;
+                };
+                [[UIApplication sharedApplication].keyWindow addSubview:vc];
+            } style:kWWActionStyleDestructive];
+
+            [actionSheet addAction:action];
+            [actionSheet showInWindow:[WWGeneric popOverWindow]];
         }
-    }
-    
-    
-    if (longPre.state == UIGestureRecognizerStateBegan) {
-        WWTagImageContainer *vc = [[WWTagImageContainer alloc] initWithImage:self.originImageArray[imageView.tag]];
-        vc.frame = [UIScreen mainScreen].bounds;
-        vc.resultImageBlock = ^(UIImage *image) {
-            NSArray <WWTagedImgLabel *> *labelModel = self.modelArray.tagImagesList[imageView.tag].tags;
-            NSMutableArray *mArray = [NSMutableArray arrayWithArray:labelModel];
-            if (mArray.count != 0) {
-                NSInteger j = mArray.count;
-                for (int i = 0; i < j; i++) {
-                    [mArray removeObjectAtIndex:0];
-                }
-                labelModel = mArray.copy;
-            }else {
-                labelModel = nil;
-            }
-            self.modelArray.tagImagesList[imageView.tag].tags = labelModel;
-            for (UIView *subviews in [imageView subviews]) {
-                if ([[subviews class] isSubclassOfClass:[WWTagImageView class]]) {
-                    [subviews removeFromSuperview];
-                }
-            }
-            ((UIImageView*)longPre.view).image = image;
-            long int tag = imageView.tag;
-            
-            if (image.size.width==image.size.height) {
-                imageView.frame = CGRectMake(0, 0, KWidth, KWidth);
-            }else if (image.size.width>image.size.height) {
-                if (image.size.width-image.size.height<image.size.height/4) {
-                    imageView.frame = CGRectMake(0, 0, KWidth, KWidth);
-                }else {
-                    imageView.frame = CGRectMake(0, KWidth/8, KWidth, KWidth*3/4);
-                }
-            }else if (image.size.width<image.size.height) {
-                if (image.size.height-image.size.width<image.size.width/4) {
-                    imageView.frame = CGRectMake(0, 0, KWidth, KWidth);
-                }else{
-                    imageView.frame = CGRectMake(KWidth/8, 0, KWidth*3/4, KWidth);
-                }
-            }
-            [self.scrollView inputView];
-            NSMutableArray *muArr = [NSMutableArray arrayWithArray:self.imageArray.mutableCopy];
-            muArr[tag] = image;
-            WWTagedImgListModel *sortModel = self.modelArray.tagImagesList[tag];
-            sortModel.image = image;
-            self.imageArray = muArr.copy;
-        };
-        [[UIApplication sharedApplication].keyWindow addSubview:vc];
     }
 }
 
@@ -280,9 +276,7 @@
     if ([self.delegate respondsToSelector:@selector(displayer:canAddTagWithGesture:)]) {
         BOOL canAddTag = [self.delegate displayer:self canAddTagWithGesture:self.tap];
         if (self.modelArray.tagImagesList[self.didImageView.tag].tags.count >= 5) {
-#warning 提示
-//            [HUDTools showText:L10NString(@"zuiduotianjia5febiaoqian") withView:self withDelay:1];
-//            [HUDTools removeHUD];
+            [WWHUD showMessage:@"最多添加五个标签" inView:self];
             return;
         }
         if (canAddTag) {

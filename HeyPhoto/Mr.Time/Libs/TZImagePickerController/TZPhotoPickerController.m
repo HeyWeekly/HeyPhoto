@@ -16,7 +16,6 @@
 #import "TZVideoPlayerController.h"
 #import "TZGifPhotoPreviewController.h"
 #import "TZLocationManager.h"
-#import "WWTagImageEditer.h"
 
 @interface TZPhotoPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate> {
     NSMutableArray *_models;
@@ -41,8 +40,6 @@
 @property (strong, nonatomic) UICollectionViewFlowLayout *layout;
 @property (nonatomic, strong) UIImagePickerController *imagePickerVc;
 @property (strong, nonatomic) CLLocation *location;
-@property (nonatomic, strong) NSMutableArray *originImageArray;
-@property (nonatomic, strong) NSMutableArray *cutImageArray;
 @end
 
 static CGSize AssetGridThumbnailSize;
@@ -396,21 +393,9 @@ static CGFloat itemMargin = 5;
     [tzImagePickerVc hideProgressHUD];
     
     if (tzImagePickerVc.autoDismiss) {
-        if (tzImagePickerVc.goToImageEditer) {
+        [self.navigationController dismissViewControllerAnimated:YES completion:^{
             [self callDelegateMethodWithPhotos:photos assets:assets infoArr:infoArr];
-            for (int i = 0; i<photos.count; i++) {
-                UIImage *image = photos[i];
-                [self.originImageArray addObject:image];
-                UIImage *newImage = [image cutImageWithSize];
-                [self.cutImageArray addObject:newImage];
-            }
-            WWTagImageEditer *imageEditerVC = [[WWTagImageEditer alloc]initWithTailoringImageArray:self.cutImageArray andWithOriginImageArray:self.originImageArray andModelArray:nil andSelectPhotoKey:nil andDidSelectPhotoKey:nil andPhotoDict:nil];
-            [self.navigationController pushViewController:imageEditerVC animated:NO];
-        }else {
-            [self.navigationController dismissViewControllerAnimated:YES completion:^{
-                [self callDelegateMethodWithPhotos:photos assets:assets infoArr:infoArr];
-            }];
-        }
+        }];
     } else {
         [self callDelegateMethodWithPhotos:photos assets:assets infoArr:infoArr];
     }
@@ -889,19 +874,6 @@ static CGFloat itemMargin = 5;
     return indexPaths;
 }
 
-- (NSMutableArray *)originImageArray {
-    if (!_originImageArray) {
-        _originImageArray = [NSMutableArray arrayWithCapacity:10];
-    }
-    return _originImageArray;
-}
-
-- (NSMutableArray *)cutImageArray {
-    if (_cutImageArray == nil) {
-        _cutImageArray = [NSMutableArray arrayWithCapacity:10];
-    }
-    return _cutImageArray;
-}
 #pragma clang diagnostic pop
 
 @end

@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface WWNavigationVC : UIView
+@property (nonatomic, strong) UIColor *titColor;
+@property (nonatomic, strong) UIColor *rightColor;
+@property (nonatomic, copy) NSString *imageName;
+@property (nonatomic, copy) NSString *rightName;
 @property (nonatomic, strong) UIButton *backBtn;
 @property(nonatomic, strong) UILabel* navTitle;
 @property (nonatomic, strong) UIButton *rightBtn;

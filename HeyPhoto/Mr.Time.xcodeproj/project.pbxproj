@@ -51,7 +51,6 @@
 		C07AC0481F3D8D9100EBED61 /* pageControlCurrentDot@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C07AC0461F3D8D9100EBED61 /* pageControlCurrentDot@3x.png */; };
 		C07AC04B1F3D953500EBED61 /* defaulthead@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C07AC0491F3D953500EBED61 /* defaulthead@3x.png */; };
 		C07AC04C1F3D953500EBED61 /* defaulthead@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C07AC04A1F3D953500EBED61 /* defaulthead@2x.png */; };
-		C07AC0501F3D971100EBED61 /* WWImageTagPHPPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = C07AC04F1F3D971100EBED61 /* WWImageTagPHPPicker.m */; };
 		C07AC0531F3D97DD00EBED61 /* WWPhotoAlbums.m in Sources */ = {isa = PBXBuildFile; fileRef = C07AC0521F3D97DD00EBED61 /* WWPhotoAlbums.m */; };
 		C07AC0561F3D982C00EBED61 /* Permissions.m in Sources */ = {isa = PBXBuildFile; fileRef = C07AC0551F3D982C00EBED61 /* Permissions.m */; };
 		C07AC05D1F3DBCAE00EBED61 /* WWActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = C07AC05C1F3DBCAE00EBED61 /* WWActionSheet.m */; };
@@ -217,8 +216,26 @@
 		FF61E0AC1E9BBE76000E68F0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF61E0AA1E9BBE76000E68F0 /* LaunchScreen.storyboard */; };
 		FF61E0B71E9BBE76000E68F0 /* Mr_TimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF61E0B61E9BBE76000E68F0 /* Mr_TimeTests.m */; };
 		FF61E0C21E9BBE76000E68F0 /* Mr_TimeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF61E0C11E9BBE76000E68F0 /* Mr_TimeUITests.m */; };
+		FF6F0EF21F6ED0F6002B283F /* albumxiala@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0EF01F6ED0F6002B283F /* albumxiala@2x.png */; };
+		FF6F0EF31F6ED0F6002B283F /* albumxiala@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0EF11F6ED0F6002B283F /* albumxiala@3x.png */; };
+		FF6F0EF51F6ED4CC002B283F /* compose_photo_photograph@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0EF41F6ED4CC002B283F /* compose_photo_photograph@2x.png */; };
+		FF6F0EFA1F6F5677002B283F /* sy_photo-normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0EF61F6F5677002B283F /* sy_photo-normal@2x.png */; };
+		FF6F0EFB1F6F5677002B283F /* sy_photo-normal@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0EF71F6F5677002B283F /* sy_photo-normal@3x.png */; };
+		FF6F0EFC1F6F5677002B283F /* sy_photo-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0EF81F6F5677002B283F /* sy_photo-selected@2x.png */; };
+		FF6F0EFD1F6F5677002B283F /* sy_photo-selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0EF91F6F5677002B283F /* sy_photo-selected@3x.png */; };
+		FF6F0F001F6F6D32002B283F /* lookPublishPromptText@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0EFE1F6F6D32002B283F /* lookPublishPromptText@2x.png */; };
+		FF6F0F011F6F6D32002B283F /* lookPublishPromptText@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0EFF1F6F6D32002B283F /* lookPublishPromptText@3x.png */; };
+		FF6F0F041F6F7066002B283F /* lookPublishTagedImgLabelPointNOGoods@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0F021F6F7066002B283F /* lookPublishTagedImgLabelPointNOGoods@2x.png */; };
+		FF6F0F051F6F7066002B283F /* lookPublishTagedImgLabelPointNOGoods@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FF6F0F031F6F7066002B283F /* lookPublishTagedImgLabelPointNOGoods@3x.png */; };
+		FFB5F9F01F6D761E00D34F35 /* backBtnBlack@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FFB5F9EE1F6D761E00D34F35 /* backBtnBlack@3x.png */; };
+		FFB5F9F11F6D761E00D34F35 /* backBtnBlack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FFB5F9EF1F6D761E00D34F35 /* backBtnBlack@2x.png */; };
+		FFB5F9FB1F6EB1EB00D34F35 /* WWImageTagPHPPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = FFB5F9FA1F6EB1EB00D34F35 /* WWImageTagPHPPicker.m */; };
+		FFB5F9FF1F6ECE3F00D34F35 /* WWAlbumTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = FFB5F9FE1F6ECE3F00D34F35 /* WWAlbumTitle.m */; };
+		FFBC59B51F6FB30500BF20A4 /* WWStikerSeleectVC.m in Sources */ = {isa = PBXBuildFile; fileRef = FFBC59B41F6FB30500BF20A4 /* WWStikerSeleectVC.m */; };
 		FFBDCCC91EE52BFF00B3AE23 /* UITableView+SDAutoTableViewCellHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = FFBDCCC61EE52BFF00B3AE23 /* UITableView+SDAutoTableViewCellHeight.m */; };
 		FFBDCCCA1EE52BFF00B3AE23 /* UIView+SDAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = FFBDCCC81EE52BFF00B3AE23 /* UIView+SDAutoLayout.m */; };
+		FFEE3C7A1F6D5E17006E587B /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FFEE3C791F6D5E17006E587B /* MBProgressHUD.m */; };
+		FFEE3C7E1F6D5E65006E587B /* WWHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FFEE3C7D1F6D5E65006E587B /* WWHUD.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -305,7 +322,6 @@
 		C07AC0491F3D953500EBED61 /* defaulthead@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defaulthead@3x.png"; sourceTree = "<group>"; };
 		C07AC04A1F3D953500EBED61 /* defaulthead@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defaulthead@2x.png"; sourceTree = "<group>"; };
 		C07AC04E1F3D971100EBED61 /* WWImageTagPHPPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWImageTagPHPPicker.h; sourceTree = "<group>"; };
-		C07AC04F1F3D971100EBED61 /* WWImageTagPHPPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWImageTagPHPPicker.m; sourceTree = "<group>"; };
 		C07AC0511F3D97DC00EBED61 /* WWPhotoAlbums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWPhotoAlbums.h; sourceTree = "<group>"; };
 		C07AC0521F3D97DD00EBED61 /* WWPhotoAlbums.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWPhotoAlbums.m; sourceTree = "<group>"; };
 		C07AC0541F3D982C00EBED61 /* Permissions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Permissions.h; sourceTree = "<group>"; };
@@ -556,12 +572,34 @@
 		FF61E0BD1E9BBE76000E68F0 /* Mr.TimeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Mr.TimeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF61E0C11E9BBE76000E68F0 /* Mr_TimeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Mr_TimeUITests.m; sourceTree = "<group>"; };
 		FF61E0C31E9BBE76000E68F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FF6F0EF01F6ED0F6002B283F /* albumxiala@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "albumxiala@2x.png"; sourceTree = "<group>"; };
+		FF6F0EF11F6ED0F6002B283F /* albumxiala@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "albumxiala@3x.png"; sourceTree = "<group>"; };
+		FF6F0EF41F6ED4CC002B283F /* compose_photo_photograph@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compose_photo_photograph@2x.png"; sourceTree = "<group>"; };
+		FF6F0EF61F6F5677002B283F /* sy_photo-normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sy_photo-normal@2x.png"; sourceTree = "<group>"; };
+		FF6F0EF71F6F5677002B283F /* sy_photo-normal@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sy_photo-normal@3x.png"; sourceTree = "<group>"; };
+		FF6F0EF81F6F5677002B283F /* sy_photo-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sy_photo-selected@2x.png"; sourceTree = "<group>"; };
+		FF6F0EF91F6F5677002B283F /* sy_photo-selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sy_photo-selected@3x.png"; sourceTree = "<group>"; };
+		FF6F0EFE1F6F6D32002B283F /* lookPublishPromptText@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lookPublishPromptText@2x.png"; sourceTree = "<group>"; };
+		FF6F0EFF1F6F6D32002B283F /* lookPublishPromptText@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lookPublishPromptText@3x.png"; sourceTree = "<group>"; };
+		FF6F0F021F6F7066002B283F /* lookPublishTagedImgLabelPointNOGoods@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lookPublishTagedImgLabelPointNOGoods@2x.png"; sourceTree = "<group>"; };
+		FF6F0F031F6F7066002B283F /* lookPublishTagedImgLabelPointNOGoods@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lookPublishTagedImgLabelPointNOGoods@3x.png"; sourceTree = "<group>"; };
+		FFB5F9EE1F6D761E00D34F35 /* backBtnBlack@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backBtnBlack@3x.png"; sourceTree = "<group>"; };
+		FFB5F9EF1F6D761E00D34F35 /* backBtnBlack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backBtnBlack@2x.png"; sourceTree = "<group>"; };
+		FFB5F9FA1F6EB1EB00D34F35 /* WWImageTagPHPPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWImageTagPHPPicker.m; sourceTree = "<group>"; };
+		FFB5F9FD1F6ECE3F00D34F35 /* WWAlbumTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWAlbumTitle.h; sourceTree = "<group>"; };
+		FFB5F9FE1F6ECE3F00D34F35 /* WWAlbumTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWAlbumTitle.m; sourceTree = "<group>"; };
+		FFBC59B31F6FB30500BF20A4 /* WWStikerSeleectVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWStikerSeleectVC.h; sourceTree = "<group>"; };
+		FFBC59B41F6FB30500BF20A4 /* WWStikerSeleectVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWStikerSeleectVC.m; sourceTree = "<group>"; };
 		FFBDCCC41EE52BFF00B3AE23 /* SDAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDAutoLayout.h; sourceTree = "<group>"; };
 		FFBDCCC51EE52BFF00B3AE23 /* UITableView+SDAutoTableViewCellHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+SDAutoTableViewCellHeight.h"; sourceTree = "<group>"; };
 		FFBDCCC61EE52BFF00B3AE23 /* UITableView+SDAutoTableViewCellHeight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+SDAutoTableViewCellHeight.m"; sourceTree = "<group>"; };
 		FFBDCCC71EE52BFF00B3AE23 /* UIView+SDAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+SDAutoLayout.h"; sourceTree = "<group>"; };
 		FFBDCCC81EE52BFF00B3AE23 /* UIView+SDAutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SDAutoLayout.m"; sourceTree = "<group>"; };
 		FFBDCCCB1EE52CBD00B3AE23 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
+		FFEE3C781F6D5E17006E587B /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		FFEE3C791F6D5E17006E587B /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		FFEE3C7C1F6D5E65006E587B /* WWHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWHUD.h; sourceTree = "<group>"; };
+		FFEE3C7D1F6D5E65006E587B /* WWHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWHUD.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -627,6 +665,8 @@
 				C089B2621EFFD0AD00648EB4 /* WWCollectBtnCircleView.m */,
 				C07AC06E1F3DD06900EBED61 /* WWGeneric.h */,
 				C07AC06F1F3DD06900EBED61 /* WWGeneric.m */,
+				FFB5F9FD1F6ECE3F00D34F35 /* WWAlbumTitle.h */,
+				FFB5F9FE1F6ECE3F00D34F35 /* WWAlbumTitle.m */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -739,7 +779,7 @@
 				C07AC0541F3D982C00EBED61 /* Permissions.h */,
 				C07AC0551F3D982C00EBED61 /* Permissions.m */,
 				C07AC04E1F3D971100EBED61 /* WWImageTagPHPPicker.h */,
-				C07AC04F1F3D971100EBED61 /* WWImageTagPHPPicker.m */,
+				FFB5F9FA1F6EB1EB00D34F35 /* WWImageTagPHPPicker.m */,
 				C07AC0511F3D97DC00EBED61 /* WWPhotoAlbums.h */,
 				C07AC0521F3D97DD00EBED61 /* WWPhotoAlbums.m */,
 			);
@@ -888,6 +928,7 @@
 		C0A69F5B1EE92DBA00DB4678 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				FFEE3C7B1F6D5E4C006E587B /* WWHUD */,
 				C0CBA6401F5EA00E008DC3B9 /* WWPictureTagsManager */,
 				C06351271F4440E500820458 /* WWErrorView */,
 				C07AC08B1F42E2AC00EBED61 /* NetWorkTools */,
@@ -915,6 +956,8 @@
 		C0A69F601EE9317E00DB4678 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				FFB5F9EE1F6D761E00D34F35 /* backBtnBlack@3x.png */,
+				FFB5F9EF1F6D761E00D34F35 /* backBtnBlack@2x.png */,
 				C07AC0451F3D8D9100EBED61 /* pageControlCurrentDot@2x.png */,
 				C07AC0461F3D8D9100EBED61 /* pageControlCurrentDot@3x.png */,
 				C07AC03D1F3D85E900EBED61 /* pageControlDot@3x.png */,
@@ -1043,6 +1086,8 @@
 				C0CBA6B21F617524008DC3B9 /* WWTagImageView.m */,
 				C0CBA6B41F623764008DC3B9 /* WWTagImageLayer.h */,
 				C0CBA6B51F623764008DC3B9 /* WWTagImageLayer.m */,
+				FFBC59B31F6FB30500BF20A4 /* WWStikerSeleectVC.h */,
+				FFBC59B41F6FB30500BF20A4 /* WWStikerSeleectVC.m */,
 			);
 			path = WWPictureTagsManager;
 			sourceTree = "<group>";
@@ -1276,6 +1321,7 @@
 		FF61E0D41E9BC061000E68F0 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				FFEE3C771F6D5E17006E587B /* HUD */,
 				C0CBA6131F5E84AC008DC3B9 /* TZImagePickerController */,
 				C07B39981F5D83B2001088F2 /* fmdb */,
 				C07AC0751F41971900EBED61 /* WeChatSDK */,
@@ -1301,6 +1347,7 @@
 		FF61E0D71E9BC061000E68F0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FF6F0EEF1F6ED0F6002B283F /* tagImage */,
 				C07B39951F5D2509001088F2 /* threeqidongye .png */,
 				C0B948F41F39DC2D0008E29F /* loginImage */,
 				C0A69F601EE9317E00DB4678 /* Common */,
@@ -1323,6 +1370,24 @@
 			path = Vendors;
 			sourceTree = "<group>";
 		};
+		FF6F0EEF1F6ED0F6002B283F /* tagImage */ = {
+			isa = PBXGroup;
+			children = (
+				FF6F0F021F6F7066002B283F /* lookPublishTagedImgLabelPointNOGoods@2x.png */,
+				FF6F0F031F6F7066002B283F /* lookPublishTagedImgLabelPointNOGoods@3x.png */,
+				FF6F0EFE1F6F6D32002B283F /* lookPublishPromptText@2x.png */,
+				FF6F0EFF1F6F6D32002B283F /* lookPublishPromptText@3x.png */,
+				FF6F0EF61F6F5677002B283F /* sy_photo-normal@2x.png */,
+				FF6F0EF71F6F5677002B283F /* sy_photo-normal@3x.png */,
+				FF6F0EF81F6F5677002B283F /* sy_photo-selected@2x.png */,
+				FF6F0EF91F6F5677002B283F /* sy_photo-selected@3x.png */,
+				FF6F0EF41F6ED4CC002B283F /* compose_photo_photograph@2x.png */,
+				FF6F0EF01F6ED0F6002B283F /* albumxiala@2x.png */,
+				FF6F0EF11F6ED0F6002B283F /* albumxiala@3x.png */,
+			);
+			path = tagImage;
+			sourceTree = "<group>";
+		};
 		FFBDCCC31EE52BFF00B3AE23 /* SDAutoLayout */ = {
 			isa = PBXGroup;
 			children = (
@@ -1333,6 +1398,24 @@
 				FFBDCCC81EE52BFF00B3AE23 /* UIView+SDAutoLayout.m */,
 			);
 			path = SDAutoLayout;
+			sourceTree = "<group>";
+		};
+		FFEE3C771F6D5E17006E587B /* HUD */ = {
+			isa = PBXGroup;
+			children = (
+				FFEE3C781F6D5E17006E587B /* MBProgressHUD.h */,
+				FFEE3C791F6D5E17006E587B /* MBProgressHUD.m */,
+			);
+			path = HUD;
+			sourceTree = "<group>";
+		};
+		FFEE3C7B1F6D5E4C006E587B /* WWHUD */ = {
+			isa = PBXGroup;
+			children = (
+				FFEE3C7C1F6D5E65006E587B /* WWHUD.h */,
+				FFEE3C7D1F6D5E65006E587B /* WWHUD.m */,
+			);
+			path = WWHUD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1406,7 +1489,7 @@
 				TargetAttributes = {
 					FF61E0981E9BBE76000E68F0 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = WQUPS6XKQ9;
+						DevelopmentTeam = 2CSYYV5Z4H;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -1460,6 +1543,9 @@
 				C089B2341EFFB45700648EB4 /* boolRedLike@2x.png in Resources */,
 				FF340B861EA0A04A00B4DB39 /* homeNormal@3x.png in Resources */,
 				C0A69F521EE7F64A00DB4678 /* 20yearsOld@2x.png in Resources */,
+				FF6F0EFC1F6F5677002B283F /* sy_photo-selected@2x.png in Resources */,
+				FF6F0F051F6F7066002B283F /* lookPublishTagedImgLabelPointNOGoods@3x.png in Resources */,
+				FF6F0EF31F6ED0F6002B283F /* albumxiala@3x.png in Resources */,
 				C089B2781F00E81F00648EB4 /* cleardelete@2x.png in Resources */,
 				FF340B781E9E640900B4DB39 /* userSelect@3x.png in Resources */,
 				C07AC04B1F3D953500EBED61 /* defaulthead@3x.png in Resources */,
@@ -1486,6 +1572,7 @@
 				C0D48A821EF680F000B92549 /* homePublish@3x.png in Resources */,
 				C07ABFD31F39EF8E00EBED61 /* loginsettingheading@3x.png in Resources */,
 				C0A69F631EE9318D00DB4678 /* bacBackBtn@3x.png in Resources */,
+				FF6F0EF51F6ED4CC002B283F /* compose_photo_photograph@2x.png in Resources */,
 				C0A69F531EE7F64A00DB4678 /* 20yearsOld@3x.png in Resources */,
 				FF340B871EA0A04A00B4DB39 /* userNormal@2x.png in Resources */,
 				C0D48AC71EFE998700B92549 /* normalLock@2x.png in Resources */,
@@ -1496,9 +1583,11 @@
 				C089B27E1F00F05100648EB4 /* userNoCollect@2x.png in Resources */,
 				C089B2791F00E81F00648EB4 /* cleardelete@3x.png in Resources */,
 				C089B2831F00F05A00648EB4 /* userCollect@3x.png in Resources */,
+				FFB5F9F01F6D761E00D34F35 /* backBtnBlack@3x.png in Resources */,
 				C0E8EDF81EFFA06D0034570D /* navrightBtn@3x.png in Resources */,
 				C0A69F641EE9318D00DB4678 /* bacBackBtn@2x.png in Resources */,
 				C07B39961F5D2509001088F2 /* threeqidongye .png in Resources */,
+				FF6F0F001F6F6D32002B283F /* lookPublishPromptText@2x.png in Resources */,
 				C07ABFF51F3C435200EBED61 /* selectBirthday@3x.png in Resources */,
 				C07ABFE11F3C2D8900EBED61 /* tellMeBirthday@3x.png in Resources */,
 				C07ABFD21F39EF8E00EBED61 /* loginsettingheading@2x.png in Resources */,
@@ -1513,6 +1602,8 @@
 				C059401D1EEFADEE002751FE /* bookLike@3x.png in Resources */,
 				C0A69F381EE79C2F00DB4678 /* Noticeicon@2x.png in Resources */,
 				C07ABFDA1F39F24F00EBED61 /* nextBirthday@3x.png in Resources */,
+				FF6F0EFB1F6F5677002B283F /* sy_photo-normal@3x.png in Resources */,
+				FF6F0EFD1F6F5677002B283F /* sy_photo-selected@3x.png in Resources */,
 				C0E8EDFF1EFFA5350034570D /* bookOval@3x.png in Resources */,
 				C089B24C1EFFBC6C00648EB4 /* Weibo@2x.png in Resources */,
 				C089B24D1EFFBC6C00648EB4 /* Weibo@3x.png in Resources */,
@@ -1522,6 +1613,7 @@
 				FF340B711E9E640900B4DB39 /* bookSelect@2x.png in Resources */,
 				C0A69F511EE7F64A00DB4678 /* 21yearsOld@2x.png in Resources */,
 				C089B2661F00A37400648EB4 /* headbackground@2x.png in Resources */,
+				FFB5F9F11F6D761E00D34F35 /* backBtnBlack@2x.png in Resources */,
 				C089B2351EFFB45700648EB4 /* boolRedLike@3x.png in Resources */,
 				C07AC0481F3D8D9100EBED61 /* pageControlCurrentDot@3x.png in Resources */,
 				C0D48AC81EFE998700B92549 /* normalLock@3x.png in Resources */,
@@ -1533,6 +1625,8 @@
 				C07ABFDB1F39F24F00EBED61 /* nextBirthday@2x.png in Resources */,
 				C07ABFE21F3C2D8900EBED61 /* tellMeBirthday@2x.png in Resources */,
 				C0A69F3B1EE79CCC00DB4678 /* Setting icon@3x.png in Resources */,
+				FF6F0F041F6F7066002B283F /* lookPublishTagedImgLabelPointNOGoods@2x.png in Resources */,
+				FF6F0EF21F6ED0F6002B283F /* albumxiala@2x.png in Resources */,
 				C0D48ACB1EFE99A100B92549 /* selectLock@2x.png in Resources */,
 				C0E8EDFE1EFFA5350034570D /* bookOval@2x.png in Resources */,
 				C089B2381EFFB8CC00648EB4 /* notwhere@2x.png in Resources */,
@@ -1550,12 +1644,14 @@
 				FF340B761E9E640900B4DB39 /* homeSelect@3x.png in Resources */,
 				C089B2391EFFB8CC00648EB4 /* notwhere@3x.png in Resources */,
 				C05940281EEFBF57002751FE /* newMessage@2x.png in Resources */,
+				FF6F0EFA1F6F5677002B283F /* sy_photo-normal@2x.png in Resources */,
 				C089B2471EFFBC6C00648EB4 /* QQzone@3x.png in Resources */,
 				FF340B741E9E640900B4DB39 /* collectSelect@3x.png in Resources */,
 				C089B2821F00F05A00648EB4 /* userCollect@2x.png in Resources */,
 				C089B26E1F00D59500648EB4 /* settingSwtch@2x.png in Resources */,
 				C05940291EEFBF57002751FE /* hotMessage@2x.png in Resources */,
 				C0CBA6371F5E84AC008DC3B9 /* TZImagePickerController.bundle in Resources */,
+				FF6F0F011F6F6D32002B283F /* lookPublishPromptText@3x.png in Resources */,
 				C07ABFE61F3C2E6000EBED61 /* birthdayDone@2x.png in Resources */,
 				FF340B821EA0A04A00B4DB39 /* bookNormal@3x.png in Resources */,
 			);
@@ -1661,7 +1757,6 @@
 				C07AC0381F3D796F00EBED61 /* TADotView.m in Sources */,
 				C0D48A311EF67EBC00B92549 /* GCDSemaphore.m in Sources */,
 				C07AC0391F3D796F00EBED61 /* TAPageControl.m in Sources */,
-				C07AC0501F3D971100EBED61 /* WWImageTagPHPPicker.m in Sources */,
 				FF340B2C1E9E3C5200B4DB39 /* VTGeneralTool.m in Sources */,
 				C0E8EDFB1EFFA3440034570D /* WWMessageDetailVCViewController.m in Sources */,
 				C0A69FA01EE949E600DB4678 /* WWSOCommon.swift in Sources */,
@@ -1678,6 +1773,8 @@
 				C07AC0931F42E2B800EBED61 /* XMCenter.m in Sources */,
 				C07B39A61F5D83B2001088F2 /* FMDatabaseAdditions.m in Sources */,
 				FF340B261E9E200000B4DB39 /* BookViewController.m in Sources */,
+				FFB5F9FB1F6EB1EB00D34F35 /* WWImageTagPHPPicker.m in Sources */,
+				FFB5F9FF1F6ECE3F00D34F35 /* WWAlbumTitle.m in Sources */,
 				C0CBA69E1F60F57A008DC3B9 /* WWTagImageModel.m in Sources */,
 				C0D48A301EF67EBC00B92549 /* GCDQueue.m in Sources */,
 				C07B39A51F5D83B2001088F2 /* FMDatabase.m in Sources */,
@@ -1689,12 +1786,14 @@
 				C0CBA6351F5E84AC008DC3B9 /* TZImageCropManager.m in Sources */,
 				C0CBA6B31F617524008DC3B9 /* WWTagImageView.m in Sources */,
 				C0D48A951EF7B97F00B92549 /* QQEngine.m in Sources */,
+				FFBC59B51F6FB30500BF20A4 /* WWStikerSeleectVC.m in Sources */,
 				C0CBA63D1F5E84AC008DC3B9 /* TZProgressView.m in Sources */,
 				C07AC0531F3D97DD00EBED61 /* WWPhotoAlbums.m in Sources */,
 				C0B949031F39DFE50008E29F /* WWLoginSettingInfoVC.m in Sources */,
 				FF340B1D1E9E1FC600B4DB39 /* UserViewController.m in Sources */,
 				C089B2991F00F5BE00648EB4 /* CustomCardLayout.swift in Sources */,
 				FF340B231E9E1FF000B4DB39 /* CollectViewController.m in Sources */,
+				FFEE3C7E1F6D5E65006E587B /* WWHUD.m in Sources */,
 				FF340B1A1E9E1FA200B4DB39 /* HomeViewController.m in Sources */,
 				C05940111EEF84E8002751FE /* WWCardSlide.m in Sources */,
 				C089B29B1F00F5BE00648EB4 /* UIViewControllerExtension.swift in Sources */,
@@ -1712,6 +1811,7 @@
 				C06351261F443ED400820458 /* WWUserModel.m in Sources */,
 				C0CBA6361F5E84AC008DC3B9 /* TZImageManager.m in Sources */,
 				C0CBA63E1F5E84AC008DC3B9 /* TZVideoPlayerController.m in Sources */,
+				FFEE3C7A1F6D5E17006E587B /* MBProgressHUD.m in Sources */,
 				C07B39A91F5D83B2001088F2 /* FMResultSet.m in Sources */,
 				C07AC0701F3DD06900EBED61 /* WWGeneric.m in Sources */,
 				C07AC03A1F3D796F00EBED61 /* SDCollectionViewCell.m in Sources */,
@@ -1868,7 +1968,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = WQUPS6XKQ9;
+				DEVELOPMENT_TEAM = 2CSYYV5Z4H;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1909,7 +2009,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = WQUPS6XKQ9;
+				DEVELOPMENT_TEAM = 2CSYYV5Z4H;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

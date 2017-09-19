@@ -13,6 +13,7 @@ pod 'YYImage'
 pod 'YYWebImage'
 pod 'pop', '~> 1.0'
 pod 'IQKeyboardManager'
+pod 'MBProgressHUD'
 end
 target 'Mr.Time' do
  pods

@@ -106,9 +106,7 @@
     }
     return _nav;
 }
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
+
 @end
 
 

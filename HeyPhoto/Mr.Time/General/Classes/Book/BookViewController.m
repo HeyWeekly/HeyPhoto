@@ -16,6 +16,7 @@
 @end
 
 @implementation BookViewController
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = viewBackGround_Color;
@@ -25,11 +26,13 @@
     _cardSlide.selectedIndex = 0;
     [self.view addSubview:_cardSlide];
 }
+
 #pragma mark - delegate
 - (void)cellWWCardSlideDidSelected {
     WWMessageVC *vc = [[WWMessageVC alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
 }
+
 #pragma mark - 懒加载
 - (WWNavigationVC *)nav {
     if (_nav == nil) {
@@ -40,7 +43,4 @@
     return _nav;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
 @end
