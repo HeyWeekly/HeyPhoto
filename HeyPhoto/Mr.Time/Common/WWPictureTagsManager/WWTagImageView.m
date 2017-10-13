@@ -495,6 +495,8 @@ static CGFloat height;
 - (WWTagImgViewTextView *)textView{
     if (_textView == nil) {
         _textView = [[WWTagImgViewTextView alloc] initWithLeftForward:self.model.direction.boolValue];
+        _textView.colorName = self.model.tagColor;
+        _textView.fontName = self.model.tagfont;
         _textView.delegate = self;
     }
     return _textView;
@@ -503,6 +505,7 @@ static CGFloat height;
 - (WWTagImagePointView *)point{
     if (_point == nil) {
         _point = [[WWTagImagePointView alloc] initWithFrame:self.bounds];
+        _point.colorName = self.model.tagColor;
     }
     return _point;
 }
@@ -541,39 +544,18 @@ static CGFloat height;
     return self;
 }
 
-- (void)didMoveToSuperview {
-    [super didMoveToSuperview];
-    [self begigFlashAnimation];
-    [self prepareTimer];
-}
-
-- (UIView *)flashView {
-    if (!_flashView) {
-        _flashView =  [[UIView alloc] init];
-        [self addSubview:_flashView];
-        _flashView.backgroundColor = [UIColor whiteColor];
-        _flashView.layer.cornerRadius = flashWidth * 0.5;
-        _flashView.alpha = 0;
-    }
-    return _flashView;
-}
-
-- (UIView *)centerView {
-    if (!_centerView) {
-        _centerView =  [[UIView alloc] init];
-        [self addSubview:_centerView];
-        _centerView.backgroundColor = [UIColor whiteColor];
-        _centerView.layer.cornerRadius = centerWidth * 0.5;
-    }
-    return _centerView;
-}
-
 - (void)layoutSubviews {
     [super layoutSubviews];
     CGFloat width = self.bounds.size.width;
     CGFloat height = self.bounds.size.height;
     self.flashView.frame = CGRectMake((width - flashWidth) * 0.5, (height - flashWidth) * 0.5, flashWidth, flashWidth);
     self.centerView.frame = CGRectMake((width - centerWidth) * 0.5, (height - centerWidth) * 0.5, centerWidth, centerWidth);
+}
+
+- (void)didMoveToSuperview {
+    [super didMoveToSuperview];
+    [self begigFlashAnimation];
+    [self prepareTimer];
 }
 
 - (void)startFlashAnimation {
@@ -609,6 +591,34 @@ static CGFloat height;
         self.flashView.alpha = 0;
         [UIView commitAnimations];
     }];
+}
+
+#pragma mark - set &&get
+- (void)setColorName:(NSString *)colorName {
+    _colorName = colorName;
+    self.centerView.backgroundColor = [UIColor colorWithHexValue:colorName];
+    self.flashView.backgroundColor = [UIColor colorWithHexValue:colorName];
+}
+
+- (UIView *)flashView {
+    if (!_flashView) {
+        _flashView =  [[UIView alloc] init];
+        [self addSubview:_flashView];
+        _flashView.backgroundColor = [UIColor whiteColor];
+        _flashView.layer.cornerRadius = flashWidth * 0.5;
+        _flashView.alpha = 0;
+    }
+    return _flashView;
+}
+
+- (UIView *)centerView {
+    if (!_centerView) {
+        _centerView =  [[UIView alloc] init];
+        [self addSubview:_centerView];
+        _centerView.backgroundColor = [UIColor whiteColor];
+        _centerView.layer.cornerRadius = centerWidth * 0.5;
+    }
+    return _centerView;
 }
 
 - (void)dealloc {
@@ -652,15 +662,6 @@ static CGFloat height;
     }else{
         self.leftCon.constant = -(self.frame.size.height / 3 + 5*screenRate);
     }
-}
-
-- (void)setTitle:(NSString *)title{
-    _title = title.copy;
-    self.label.text = _title;
-    CGSize size = [_title boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, height) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:self.label.font} context:nil].size;
-    self.wCon.constant = height / 3 + 5*screenRate + size.width + 8*screenRate > 125*screenRate ? 125*screenRate : height / 3 + 5*screenRate + size.width + 8*screenRate;
-    [self layoutIfNeeded];
-    [self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect{
@@ -734,6 +735,26 @@ static CGFloat height;
         self.leftCon = [NSLayoutConstraint constraintWithItem:self.label attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:-(height / 3 + 5*screenRate)];
         [self addConstraint:self.leftCon];
     }
+}
+
+#pragma mark - set &&get
+- (void)setTitle:(NSString *)title{
+    _title = title.copy;
+    self.label.text = _title;
+    CGSize size = [_title boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, height) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:self.label.font} context:nil].size;
+    self.wCon.constant = height / 3 + 5*screenRate + size.width + 8*screenRate > 125*screenRate ? 125*screenRate : height / 3 + 5*screenRate + size.width + 8*screenRate;
+    [self layoutIfNeeded];
+    [self setNeedsDisplay];
+}
+
+- (void)setColorName:(NSString *)colorName {
+    _colorName = colorName;
+    self.label.textColor = [UIColor colorWithHexValue:colorName];
+}
+
+- (void)setFontName:(NSString *)fontName {
+    _fontName = fontName;
+    self.label.font = [UIFont fontWithName:fontName size:12*screenRate];
 }
 
 - (UILabel *)label{

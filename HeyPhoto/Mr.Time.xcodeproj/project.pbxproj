@@ -59,7 +59,6 @@
 		C07AC06D1F3DCF0900EBED61 /* UIView+WWExt.m in Sources */ = {isa = PBXBuildFile; fileRef = C07AC06B1F3DCF0900EBED61 /* UIView+WWExt.m */; };
 		C07AC0701F3DD06900EBED61 /* WWGeneric.m in Sources */ = {isa = PBXBuildFile; fileRef = C07AC06F1F3DD06900EBED61 /* WWGeneric.m */; };
 		C07AC0731F3DD2EB00EBED61 /* WWGeneric+Application.m in Sources */ = {isa = PBXBuildFile; fileRef = C07AC0721F3DD2EB00EBED61 /* WWGeneric+Application.m */; };
-		C07AC07A1F41973200EBED61 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C07AC0761F41973200EBED61 /* libWeChatSDK.a */; };
 		C07AC07C1F41975400EBED61 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C07AC07B1F41975400EBED61 /* SystemConfiguration.framework */; };
 		C07AC07E1F41978A00EBED61 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C07AC07D1F41978A00EBED61 /* libsqlite3.0.tbd */; };
 		C07AC07F1F41979400EBED61 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C0D48A231EF67D3800B92549 /* libz.tbd */; };
@@ -343,10 +342,6 @@
 		C07AC0711F3DD2EB00EBED61 /* WWGeneric+Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WWGeneric+Application.h"; sourceTree = "<group>"; };
 		C07AC0721F3DD2EB00EBED61 /* WWGeneric+Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WWGeneric+Application.m"; sourceTree = "<group>"; };
 		C07AC0741F41902C00EBED61 /* API.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = API.h; sourceTree = "<group>"; };
-		C07AC0761F41973200EBED61 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
-		C07AC0771F41973200EBED61 /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
-		C07AC0781F41973200EBED61 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
-		C07AC0791F41973200EBED61 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		C07AC07B1F41975400EBED61 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C07AC07D1F41978A00EBED61 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		C07AC0801F41979F00EBED61 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -626,7 +621,6 @@
 				C07AC07F1F41979400EBED61 /* libz.tbd in Frameworks */,
 				C07AC07E1F41978A00EBED61 /* libsqlite3.0.tbd in Frameworks */,
 				C07AC07C1F41975400EBED61 /* SystemConfiguration.framework in Frameworks */,
-				C07AC07A1F41973200EBED61 /* libWeChatSDK.a in Frameworks */,
 				8E0E38A3D0D61B3B40177530 /* Pods_Mr_Time.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -832,17 +826,6 @@
 				FFAB474A1F73967100A2F011 /* UIColor+WWExt.m */,
 			);
 			path = Category;
-			sourceTree = "<group>";
-		};
-		C07AC0751F41971900EBED61 /* WeChatSDK */ = {
-			isa = PBXGroup;
-			children = (
-				C07AC0761F41973200EBED61 /* libWeChatSDK.a */,
-				C07AC0771F41973200EBED61 /* WechatAuthSDK.h */,
-				C07AC0781F41973200EBED61 /* WXApi.h */,
-				C07AC0791F41973200EBED61 /* WXApiObject.h */,
-			);
-			path = WeChatSDK;
 			sourceTree = "<group>";
 		};
 		C07AC08B1F42E2AC00EBED61 /* NetWorkTools */ = {
@@ -1309,7 +1292,6 @@
 				FFEE3C771F6D5E17006E587B /* HUD */,
 				C0CBA6131F5E84AC008DC3B9 /* TZImagePickerController */,
 				C07B39981F5D83B2001088F2 /* fmdb */,
-				C07AC0751F41971900EBED61 /* WeChatSDK */,
 				C07AC0261F3D796F00EBED61 /* SDCycleScrollView */,
 				C089B2901F00F5BE00648EB4 /* Classes */,
 				C0D48A8B1EF7B5FC00B92549 /* CardCollectionView */,

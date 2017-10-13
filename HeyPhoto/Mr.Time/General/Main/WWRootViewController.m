@@ -22,12 +22,12 @@
 //做全局loading与全局消息推送
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = viewBackGround_Color;
-    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 

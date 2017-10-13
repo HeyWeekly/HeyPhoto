@@ -7,7 +7,6 @@
 //
 
 #import "WWAppDelegate+AppLifeCircle.h"
-#import "WXApi.h"
 
 @implementation WWAppDelegate (AppLifeCircle)
 -(void)applicationDidEnterBackground:(UIApplication *)application{

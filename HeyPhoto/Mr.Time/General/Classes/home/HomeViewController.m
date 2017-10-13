@@ -379,7 +379,7 @@
         }
         if (i == 5) {
             WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
-            UIImage *image = [UIImage imageNamed:@"minebuou"];
+            UIImage *image = [UIImage imageNamed:@"shijianxiansheng"];
             model.image = image;
             [mArray addObject:model];
         }

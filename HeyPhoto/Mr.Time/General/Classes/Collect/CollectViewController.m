@@ -13,15 +13,18 @@
 #import "WWTagImageModel.h"
 #import "WWTagImageDetailVC.h"
 
-@interface  CollectCardView : UIView
-@property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong,readwrite) YYLabel *toLabel;
-@property (nonatomic, strong,readwrite) WWLabel *yearNumLabel;
-@property (nonatomic, strong,readwrite) YYLabel *yearsLabel;
-@property (nonatomic, strong,readwrite) YYLabel *countLabel;
+@protocol CollectCardViewDelagate <NSObject>
+- (void)didSelectWithModel:(WWTagImageModel *)model;
 @end
 
-@interface CollectViewController ()<UICollectionViewDataSource>
+@interface  CollectCardView : UIView
+@property (nonatomic, strong,readwrite) WWLabel *yearNumLabel;
+@property (nonatomic, strong,readwrite) YYLabel *countLabel;
+@property (nonatomic, strong) UIButton *coverImage;
+@property (nonatomic,weak) id <CollectCardViewDelagate> delegate;
+@end
+
+@interface CollectViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,CollectCardViewDelagate>
 @property (nonatomic, strong) WWNavigationVC *nav;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *listArray;
@@ -34,13 +37,14 @@
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = viewBackGround_Color;
+    self.modelArray = [NSMutableArray array];
     [self loadData];
     [self setupViews];
 }
 - (void)setupViews {
     [self.view addSubview:self.nav];
     [self.view addSubview:self.cardView];
-    NSMutableArray *arr = [self generateCardInfoWithCardCount:10];
+    NSMutableArray *arr = [self generateCardInfoWithCardCount:6];
     [self.cardView setWithCards:arr];
     [self.cardView showStyleWithStyle:1];
 }
@@ -60,15 +64,21 @@
             layout.selectIdx = indexPath.row;
         }
     };
-    cell.backgroundColor = [UIColor redColor];
-    UIButton *collView = [[UIButton alloc]init];
+    cell.backgroundColor = [UIColor whiteColor];
+    CollectCardView *collView = [[CollectCardView alloc]init];
     collView.frame = cell.bounds;
-    [collView setImage:self.modelArray[indexPath.row].tagImagesList[indexPath.row].image forState:UIControlStateNormal];
-    collView.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    collView.delegate = self;
+    collView.countLabel.text = @"1314";
     collView.tag = 2000;
     [cell addSubview:collView];
     return cell;
 }
+
+- (void)didSelectWithModel:(WWTagImageModel *)model {
+    WWTagImageDetailVC *vc = [[WWTagImageDetailVC alloc]initWithMolde:self.modelArray[0]];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 #pragma mark - 懒加载
 - (NSMutableArray *)generateCardInfoWithCardCount:(int)cardCount {
     NSMutableArray *arr = [NSMutableArray array];
@@ -222,7 +232,7 @@
         }
         if (i == 5) {
             WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
-            UIImage *image = [UIImage imageNamed:@"minebuou"];
+            UIImage *image = [UIImage imageNamed:@"shijianxiansheng"];
             model.image = image;
             [mArray addObject:model];
         }
@@ -256,62 +266,57 @@
     return self;
 }
 - (void)setupViews{
-    [self addSubview:self.toLabel];
-    [self.toLabel sizeToFit];
-    self.toLabel.left = 20*screenRate;
-    self.toLabel.top = 15*screenRate;
-    
     [self addSubview:self.yearNumLabel];
     [self.yearNumLabel sizeToFit];
-    self.yearNumLabel.left = self.toLabel.right+3;
+    self.yearNumLabel.left = 20*screenRate;
     self.yearNumLabel.top = 15*screenRate;
-
-    [self addSubview:self.yearsLabel];
-    [self.yearsLabel sizeToFit];
-    self.yearsLabel.left = self.yearNumLabel.right+3;
-    self.yearsLabel.top = 15*screenRate;
     
     [self addSubview:self.countLabel];
     [self.countLabel sizeToFit];
     self.countLabel.right = KWidth - 20*screenRate;
     self.countLabel.top = 15*screenRate;
     
+    [self addSubview:self.coverImage];
+    self.coverImage.left_sd = 0;
+    self.coverImage.top_sd = self.yearNumLabel.bottom+20*screenRate;
+    self.coverImage.width_sd = KWidth;
+    self.coverImage.height_sd = 405*screenRate;
 }
-- (YYLabel *)toLabel {
-    if (_toLabel == nil) {
-        _toLabel = [[YYLabel alloc]init];
-        _toLabel.text = @"TO";
-        _toLabel.textColor = RGBCOLOR(0x50616E);
-        _toLabel.font = [UIFont fontWithName:kFont_DINAlternate size:24*screenRate];
+
+- (void)tagClick {
+    if ([self.delegate respondsToSelector:@selector(didSelectWithModel:)]) {
+        [self.delegate didSelectWithModel:nil];
     }
-    return _toLabel;
 }
+
 - (WWLabel *)yearNumLabel {
     if (_yearNumLabel == nil) {
         _yearNumLabel = [[WWLabel alloc]init];
         _yearNumLabel.font = [UIFont fontWithName:kFont_DINAlternate size:24*screenRate];
-        _yearNumLabel.text = @"25";
+        _yearNumLabel.text = @"假装我是标题~";
         NSArray *gradientColors = @[(id)RGBCOLOR(0x15C2FF).CGColor, (id)RGBCOLOR(0x2EFFB6).CGColor];
         _yearNumLabel.colors =gradientColors;
     }
     return _yearNumLabel;
 }
-- (YYLabel *)yearsLabel {
-    if (_yearsLabel == nil) {
-        _yearsLabel = [[YYLabel alloc]init];
-        _yearsLabel.textColor = RGBCOLOR(0x50616E);
-        _yearsLabel.font = [UIFont fontWithName:kFont_DINAlternate size:24*screenRate];
-        _yearsLabel.text = @"YEARS OLD";
-    }
-    return _yearsLabel;
-}
+
 - (YYLabel *)countLabel {
     if (_countLabel == nil) {
         _countLabel = [[YYLabel alloc]init];
-        _countLabel.text = @"5";
+        _countLabel.text = @"1314";
         _countLabel.textColor = RGBCOLOR(0x15C2FF);
         _countLabel.font = [UIFont fontWithName:kFont_DINAlternate size:24*screenRate];
     }
     return _countLabel;
+}
+
+- (UIButton *)coverImage {
+    if (!_coverImage) {
+        _coverImage = [[UIButton alloc]init];
+        [_coverImage setImage:[UIImage imageNamed:@"minebuou"] forState:UIControlStateNormal];
+        _coverImage.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [_coverImage addTarget:self action:@selector(tagClick) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _coverImage;
 }
 @end

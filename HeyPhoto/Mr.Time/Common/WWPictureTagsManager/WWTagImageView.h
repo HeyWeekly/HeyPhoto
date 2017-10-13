@@ -37,6 +37,7 @@ static CGFloat const flashWidth = 30;
 static CGFloat const centerWidth = 7.5;
 
 @interface WWTagImagePointView : UIView
+@property (nonatomic, strong) NSString *colorName;
 /** 闪动的 view */
 @property(nonatomic, strong) UIView *flashView;
 @property(nonatomic, strong) UIView *centerView;
@@ -46,6 +47,8 @@ static CGFloat const centerWidth = 7.5;
 
 
 @interface WWTagImgViewTextView : UIView
+@property (nonatomic, strong) NSString *colorName;
+@property (nonatomic, strong) NSString *fontName;
 @property (nonatomic, strong) UILabel* label;
 @property (nonatomic, copy) NSString* title;
 @property (nonatomic, weak) id <WWTagImgViewTextViewDelegate> delegate;

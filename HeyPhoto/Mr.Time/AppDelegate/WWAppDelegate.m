@@ -12,10 +12,9 @@
 #import "WWAppDelegate+RootController.h"
 #import "MLTransition.h"
 #import "IQKeyboardManager.h"
-#import "WXApi.h"
 #import "WWErrorView.h"
 
-@interface WWAppDelegate ()<WXApiDelegate>
+@interface WWAppDelegate ()
 @property (nonatomic,strong) NSMutableArray *imageArr;
 @property (nonatomic,assign) NSInteger *imageIndex;
 @end
@@ -33,8 +32,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(LoginSuccess) name:@"userLoginSuccess" object:nil];
     
     [WWErrorView alloc];
-    
-    [WXApi registerApp:@"wxfaf372338328fa69"];
     
     [self setAppWindows];
     [self setTabbarController]; 
