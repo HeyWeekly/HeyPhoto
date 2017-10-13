@@ -24,6 +24,7 @@
 @end
 
 @implementation WWCardSlideCell
+
 -(instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self setupSubViews];
@@ -110,6 +111,7 @@
     [self addSubview:_textLabel];
     [_textLabel sizeToFit];
 }
+
 - (void)likeClick {
     self.islike = !self.islike;
     if (self.islike) {
@@ -122,6 +124,7 @@
         [self.delegate bookCellLike];
     }
 }
+
 - (UILabel *)yearsNum {
     if (_yearsNum == nil) {
         _yearsNum = [[UILabel alloc]init];
@@ -131,6 +134,7 @@
     }
     return _yearsNum;
 }
+
 - (UILabel *)yearsLabel {
     if (_yearsLabel == nil) {
         _yearsLabel = [[UILabel alloc]init];
@@ -140,6 +144,7 @@
     }
     return _yearsLabel;
 }
+
 - (UILabel *)oldLabel {
     if (_oldLabel == nil) {
         _oldLabel = [[UILabel alloc]init];
@@ -148,8 +153,5 @@
         _oldLabel.text = @"OLD";
     }
     return _oldLabel;
-}
--(void)setModel:(id)model {
-
 }
 @end

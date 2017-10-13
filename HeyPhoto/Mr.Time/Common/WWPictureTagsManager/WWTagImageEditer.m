@@ -9,19 +9,17 @@
 #import "WWTagImageEditer.h"
 #import "WWTagImageModel.h"
 #import "WWTagImageDisPlayer.h"
-#import "WWTagImageOrderModel.h"
 #import "WWCollectionViewLayout.h"
 #import "WWTagImageView.h"
 #import "WWStikerSeleectVC.h"
 #import "WWAlbumTitle.h"
+#import "UIColor+WWExt.h"
+#import "WWTagImagePublishVC.h"
 
 @interface WWTagCustomSettingCell : UICollectionViewCell
-@property (nonatomic, copy) NSString* title;
 @property (nonatomic, strong) UILabel* textLabel;
-@property (nonatomic, strong) UIImageView* imgView;
-@property (nonatomic, strong) UIView* colorView;
-@property (nonatomic, strong) UIImage* image;
-@property (nonatomic, strong) NSString* color;
+@property (nonatomic, copy) NSString* color;
+@property (nonatomic, copy) NSString *fontName;
 @end
 
 
@@ -31,15 +29,9 @@
 @property (nonatomic, strong) UICollectionView* collection;
 @property (nonatomic, strong) WWCollectionViewLayout* layout;
 @property (nonatomic, copy) NSArray* modelArray;
+@property (nonatomic, assign) BOOL isColor;
 @property (nonatomic, strong) void (^clickCallBack)(UICollectionView* collectionView,NSIndexPath* indexPath);
-- (instancetype)initWithModelArray:(NSArray*)modelArray clickCallBack:(void (^)(UICollectionView* collectionView,NSIndexPath* indexPath))callBack;
-@end
-
-
-@interface WWLabelDetailCBCell : UIButton
-@property (nonatomic, copy) NSString* title;
-@property (nonatomic, assign) BOOL disabled;
-@property (nonatomic, strong) UILabel* customTagOption;
+- (instancetype)initWithModelArray:(NSArray*)modelArray withColor:(BOOL)isColor clickCallBack:(void (^)(UICollectionView* collectionView,NSIndexPath* indexPath))callBack;
 @end
 
 
@@ -48,20 +40,17 @@
 - (void)didCheckLabel;
 @end
 
-@interface WWLabelDetailCB : UIView<WWCollectionViewLayoutDelegate>
+@interface WWLabelDetailCB : UIView
 @property (nonatomic, strong) WWTagCustomSetting *tagSetting;
 @property (nonatomic, weak) id <WWLabelDetailCBDelegate> delegate;
 @property (nonatomic, strong) UIView* maskView;
 @property (nonatomic, strong) UIButton* conformBtn;
 @property (nonatomic, strong) UILabel* searchResultLabel;
-@property (nonatomic, strong) WWCollectionViewLayout* layout;
-@property (nonatomic, strong) UIView* btnContainer;
-@property (nonatomic, strong) WWLabelDetailCBCell* colorBtn;
-@property (nonatomic, strong) WWLabelDetailCBCell* fontBtn;
-@property (nonatomic, strong) WWLabelDetailCBCell* shapeBtn;
+@property (nonatomic, strong) UIButton* colorBtn;
+@property (nonatomic, strong) UIButton* fontBtn;
+@property (nonatomic, strong) UIButton* shapeBtn;
 @property (nonatomic, strong) UILabel* commendLabel;
 @property (nonatomic, assign) CGFloat bottomHeight;
-@property (nonatomic, strong) NSLayoutConstraint* btnCon;
 @property (nonatomic, strong) WWTagedImgLabel* model;
 @property (nonatomic, weak) UIViewController* viewController;
 @property (nonatomic, strong) NSDate* timestamp;
@@ -271,36 +260,41 @@
 }
 
 - (void)displayer:(WWTagImageDisPlayer*)displayer longPressedWithTag:(WWTagImageView*)tag gesture:(UILongPressGestureRecognizer*)gesture andIndex:(NSInteger)index{
+     WEAK_SELF;
     if ([gesture state] == UIGestureRecognizerStateBegan) {
         if (self.labelCB || (self.imgView.maskView)) {
             if ([self.labelCB.model isEqual:tag.model]) {
-//                YKAlertView *alertView = [[YKAlertView alloc] initWithTitle:L10NString(@"Hint") andText:L10NString(@"querenshanchubiaoqian") andCancel:YES];
-//                __weak __typeof__(self) weakSelf = self;
-//                alertView.sureBtnClick = ^() {
-//                    XER_TagedImgLabel* model = tag.model;
-//                    NSArray* labels = weakSelf.tagedImgModel[index].tags;
-//                    NSMutableArray* mArray = [NSMutableArray arrayWithArray:labels];
-//                    [mArray removeObject:model];
-//                    weakSelf.tagedImgModel[index].tags = mArray.copy;
-//                    [tag removeFromSuperview];
-//                    [weakSelf didCheckLabel];
-//                };
-//                [alertView show:YES];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定删除标签？" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    WWTagedImgLabel* model = tag.model;
+                    NSArray* labels = weakSelf.tagedImgModel[index].tags;
+                    NSMutableArray* mArray = [NSMutableArray arrayWithArray:labels];
+                    [mArray removeObject:model];
+                    weakSelf.tagedImgModel[index].tags = mArray.copy;
+                    [tag removeFromSuperview];
+                    [weakSelf didCheckLabel];
+                }];
+                UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+                [alert addAction:action];
+                [alert addAction:action2];
+                [self presentViewController:alert animated:YES completion:nil];
             }
             return;
         }
-//        YKAlertView *alertView = [[YKAlertView alloc] initWithTitle:L10NString(@"Hint") andText:L10NString(@"querenshanchubiaoqian") andCancel:YES];
-//        __weak __typeof__(self) weakSelf = self;
-//        alertView.sureBtnClick = ^() {
-//            XER_TagedImgLabel* model = tag.model;
-//            NSArray* labels = weakSelf.tagedImgModel[index].tags;
-//            NSMutableArray* mArray = [NSMutableArray arrayWithArray:labels];
-//            [mArray removeObject:model];
-//            weakSelf.tagedImgModel[index].tags = mArray.copy;
-//            [tag removeFromSuperview];
-//            [weakSelf didCheckLabel];
-//        };
-//        [alertView show:YES];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定删除标签？" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            WWTagedImgLabel* model = tag.model;
+            NSArray* labels = weakSelf.tagedImgModel[index].tags;
+            NSMutableArray* mArray = [NSMutableArray arrayWithArray:labels];
+            [mArray removeObject:model];
+            weakSelf.tagedImgModel[index].tags = mArray.copy;
+            [tag removeFromSuperview];
+            [weakSelf didCheckLabel];
+        }];
+        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:action];
+        [alert addAction:action2];
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -323,13 +317,13 @@
         }];
         [[NSUserDefaults standardUserDefaults] synchronize];
     });
-    [self startLabelEditingWithModel:model andOrderModel:nil];
+    [self startLabelEditingWithModel:model];
     
     [tag startEditing];
 }
 
 #pragma mark - label editer
-- (void)startLabelEditingWithModel:(WWTagedImgLabel*)model andOrderModel:(WWTagImageOrderModel *)orderModel{
+- (void)startLabelEditingWithModel:(WWTagedImgLabel*)model {
     self.imgView.scrollView.userInteractionEnabled = NO;
     self.labelCB = [[WWLabelDetailCB alloc] initWithFrame:CGRectMake(0, 44 + KWidth + 100, KWidth, KHeight - 44 - KWidth)];
     self.labelCB.alpha = 0;
@@ -378,13 +372,12 @@
             [mArray addObject:image];
         }
         self.captureImageArray = mArray.copy;
-        //        GoIntoPhotoViewController* photoVC = [[GoIntoPhotoViewController alloc] initWithImageArray:self.imgView.imageArray andMode:self.imgView.modelArray andCapImageArray:self.captureImageArray andSelectPhotoKey:self.selectPhotoKey andoriginImageArray:self.originImageArray andPhotoDict:self.photoDict];
-        //        [self.navigationController pushViewController:photoVC animated:YES];
+        WWTagImagePublishVC* photoVC = [[WWTagImagePublishVC alloc] initWithImageArray:self.imgView.imageArray andMode:self.imgView.modelArray andCapImageArray:self.captureImageArray andSelectPhotoKey:self.selectPhotoKey andoriginImageArray:self.originImageArray andPhotoDict:self.photoDict];
+        [self.navigationController pushViewController:photoVC animated:YES];
     }
 }
 
--(UIImage*)captureView: (UIView *)theView
-{
+-(UIImage*)captureView: (UIView *)theView {
     CGRect rect = theView.frame;
     UIGraphicsBeginImageContextWithOptions(rect.size, theView.opaque, 0.0);
     [theView drawViewHierarchyInRect:theView.bounds afterScreenUpdates:NO];
@@ -393,7 +386,7 @@
     return img;
 }
 
-- (void)goBackNav{
+- (void)goBackNav {
     if ([self.delegate respondsToSelector:@selector(tagedImgEditerWantPoped:)]) {
         [self.delegate tagedImgEditerWantPoped:self];
     }
@@ -452,54 +445,40 @@
 
 #pragma mark - 视图
 - (void)setupSubviews{
-    
     [self addSubview:self.commendLabel];
-    [self addSubview:self.btnContainer];
     [self addSubview:self.conformBtn];
     self.conformBtn.alpha = 1;
-    [self.layout prepareLayout];
-    self.colorBtn = [[WWLabelDetailCBCell alloc] initWithFrame:[self.layout layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]].frame];
-    self.fontBtn = [[WWLabelDetailCBCell alloc] initWithFrame:[self.layout layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]].frame];
-    self.shapeBtn = [[WWLabelDetailCBCell alloc] initWithFrame:[self.layout layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0]].frame];
-    [self.colorBtn setTitle:@"颜色" forState:UIControlStateNormal];
-    [self.fontBtn setTitle:@"字体" forState:UIControlStateNormal];
-    [self.shapeBtn setTitle:@"形状" forState:UIControlStateNormal];
-    [self.colorBtn addTarget:self action:@selector(colorBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.fontBtn addTarget:self action:@selector(fontBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.shapeBtn addTarget:self action:@selector(shapeBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    self.shapeBtn.userInteractionEnabled = YES;
-    [self.btnContainer addSubview:self.colorBtn];
-    [self.btnContainer addSubview:self.fontBtn];
-    [self.btnContainer addSubview:self.shapeBtn];
-    self.btnContainer.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.colorBtn sizeToFit];
+    self.colorBtn.left_sd = 20*screenRate;
+    self.colorBtn.top_sd = 70*screenRate;
+    [self addSubview:self.colorBtn];
+    [self.fontBtn sizeToFit];
+    self.fontBtn.left_sd = self.colorBtn.right_sd+25*screenRate;
+    self.fontBtn.top_sd = 70*screenRate;
+    [self addSubview:self.fontBtn];
+    [self.shapeBtn sizeToFit];
+    self.shapeBtn.left_sd = self.fontBtn.right_sd+25*screenRate;
+    self.shapeBtn.centerY_sd = self.fontBtn.centerY_sd;
+     [self addSubview:self.shapeBtn];
     self.commendLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.conformBtn.translatesAutoresizingMaskIntoConstraints = NO;
-    NSDictionary* dict = @{@"btn":self.btnContainer,@"commend":self.commendLabel,@"conform":self.conformBtn};
-    NSDictionary* metrics = @{@"btnM":@(44*screenRate),@"cabH":@(_bottomHeight),@"commendT":@(45*screenRate),@"btnH":@(65*screenRate),@"resultB":@((40+20)*screenRate),@"resultH":@(50*screenRate),@"resultW":@(KWidth-30*screenRate*2)};
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-commendT-[btn]" options:0 metrics:metrics views:dict]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[btn(==btnH)]" options:0 metrics:metrics views:dict]];
+    NSDictionary* dict = @{@"commend":self.commendLabel,@"conform":self.conformBtn};
+    NSDictionary* metrics = @{@"btnM":@(44*screenRate),@"cabH":@(_bottomHeight),@"commendT":@(35*screenRate),@"btnH":@(65*screenRate),@"resultB":@((40+20)*screenRate),@"resultH":@(50*screenRate),@"resultW":@(KWidth-30*screenRate*2)};
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[conform]-0-|" options:0 metrics:metrics views:dict]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[conform(==cabH)]-0-|" options:0 metrics:metrics views:dict]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-commendT-[commend]" options:0 metrics:metrics views:dict]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.commendLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
-    self.btnCon = [NSLayoutConstraint constraintWithItem:self.btnContainer attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:85*screenRate];
-    [self addConstraint:self.btnCon];
 }
 
-#pragma mark - cb layout
-- (NSInteger)layoutNumberOfSection:(WWCollectionViewLayout *)layout{
-    return 1;
-}
-- (NSInteger)layout:(WWCollectionViewLayout *)layout numberOfItemsForSection:(NSInteger)section{
-    return 3;
-}
-
-- (CGSize)layout:(WWCollectionViewLayout *)layout sizeForCellAtIndexPath:(NSIndexPath *)indexPath{
-    return CGSizeMake(65*screenRate, 65*screenRate);
+#pragma mark -点击事件
+- (void)conformBtnClick{
+    if ([self.delegate respondsToSelector:@selector(didCheckLabel)]) {
+        [self.delegate didCheckLabel];
+    }
 }
 
 - (void)resetTwiceCBWithCallBack:(void (^)(BOOL finished))callback{
-    __weak typeof(self) weakSelf = self;
+    WEAK_SELF;
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         weakSelf.tagSetting.frame = CGRectOffset(self.bounds, 0, 50);
         weakSelf.tagSetting.alpha = 0;
@@ -513,7 +492,7 @@
 }
 
 - (void)colorBtnClick{
-    __weak typeof(self) weakSelf = self;
+    WEAK_SELF;
     if (self.tagSetting) {
         [self resetTwiceCBWithCallBack:^(BOOL finished) {
             [weakSelf showColor];
@@ -523,14 +502,11 @@
     }
 }
 - (void)showColor{
-    __weak typeof(self) weakSelf = self;
-    self.tagSetting = [[WWTagCustomSetting alloc] initWithModelArray:nil clickCallBack:^(UICollectionView *collectionView, NSIndexPath *indexPath) {
+    WEAK_SELF;
+    NSArray *colorArray =@[@"FC577A",@"77EEDF",@"9013FE",@"55A2FB",@"A546AA",@"F8E71C",@"292929",@"D5858B",@"838CCD",@"E514BD"];
+    self.tagSetting = [[WWTagCustomSetting alloc] initWithModelArray:colorArray withColor:YES clickCallBack:^(UICollectionView *collectionView, NSIndexPath *indexPath) {
         if (indexPath.row >= 0) {
-//            XER_SKUModel* model = [XER_LookPublish_Conditions sharedLookPublish_Conditions].colors[indexPath.row];
-//            if (![model.id_color isEqualToString:weakSelf.model.goods.sku.id_color]) {
-//                weakSelf.model.goods.sku = model.copy;
-//                [weakSelf clearGoods];
-//            }
+            weakSelf.model.tagColor = colorArray[indexPath.row];
         }
         [self resetTwiceCBWithCallBack:nil];
     }];
@@ -544,7 +520,7 @@
 }
 
 - (void)fontBtnClick{
-    __weak typeof(self) weakSelf = self;
+    WEAK_SELF;
     if (self.tagSetting) {
         [self resetTwiceCBWithCallBack:^(BOOL finished) {
             [weakSelf showFont];
@@ -555,15 +531,11 @@
     
 }
 - (void)showFont{
-    
-    __weak typeof(self) weakSelf = self;
-    self.tagSetting = [[WWTagCustomSetting alloc] initWithModelArray:nil clickCallBack:^(UICollectionView *collectionView, NSIndexPath *indexPath) {
+    WEAK_SELF;
+    NSArray *fontArray = @[kFont_Bold,kFont_Thin,kFont_Light,kFont_Avenir,kFont_Medium,kFont_DINAlternate,kFont_Regular,kFont_Copperplate,kFont_AppleSDGothicNeo,kFont_Thonburi,kFont_GillSans,kFont_MarkerFelt,kFont_KohinoorTelugu,kFont_AvenirNextCondensed];
+    self.tagSetting = [[WWTagCustomSetting alloc] initWithModelArray:fontArray withColor:NO clickCallBack:^(UICollectionView *collectionView, NSIndexPath *indexPath) {
         if (indexPath.row >= 0) {
-//            XER_SKUModel* model = [XER_LookPublish_Conditions sharedLookPublish_Conditions].colors[indexPath.row];
-//            if (![model.id_color isEqualToString:weakSelf.model.goods.sku.id_color]) {
-//                weakSelf.model.goods.sku = model.copy;
-//                [weakSelf clearGoods];
-//            }
+            weakSelf.model.tagfont = fontArray[indexPath.row];
         }
         [self resetTwiceCBWithCallBack:nil];
     }];
@@ -588,24 +560,37 @@
     
 }
 - (void)changeShape{
-    NSLog(@"12345");
+    [WWHUD showMessage:@"与《小红书》标签的样式效果形同，下个版本更新此功能" inView:self afterDelayTime:2];
 }
 #pragma mark - 懒加载
-- (WWCollectionViewLayout *)layout{
-    if (_layout == nil) {
-        _layout = [[WWCollectionViewLayout alloc] init];
-        _layout.InteritemSpacing = 47*screenRate;
-        _layout.expectSize = [NSValue valueWithCGSize:CGSizeMake(KWidth - 25*2*screenRate, 65*screenRate)];
-        _layout.delegate = self;
-        _layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+- (UIButton *)colorBtn {
+    if (_colorBtn == nil) {
+        _colorBtn = [[UIButton alloc]init];
+        [_colorBtn setImage:[UIImage imageNamed:@"COLORBTN"] forState:UIControlStateNormal];
+        [_colorBtn addTarget:self action:@selector(colorBtnClick) forControlEvents:UIControlEventTouchUpInside];
+        [_colorBtn setBackgroundColor:[UIColor clearColor]];
     }
-    return _layout;
+    return _colorBtn;
 }
-- (UIView *)btnContainer{
-    if (_btnContainer == nil) {
-        _btnContainer = [UIView new];
+
+- (UIButton *)fontBtn {
+    if (_fontBtn == nil) {
+        _fontBtn = [[UIButton alloc]init];
+        [_fontBtn setImage:[UIImage imageNamed:@"FONTBTN"] forState:UIControlStateNormal];
+        [_fontBtn addTarget:self action:@selector(fontBtnClick) forControlEvents:UIControlEventTouchUpInside];
+        [_fontBtn setBackgroundColor:[UIColor clearColor]];
     }
-    return _btnContainer;
+    return _fontBtn;
+}
+
+- (UIButton *)shapeBtn {
+    if (_shapeBtn == nil) {
+        _shapeBtn = [[UIButton alloc]init];
+        [_shapeBtn setImage:[UIImage imageNamed:@"SHAPEBTN"] forState:UIControlStateNormal];
+        [_shapeBtn addTarget:self action:@selector(shapeBtnClick) forControlEvents:UIControlEventTouchUpInside];
+        [_shapeBtn setBackgroundColor:[UIColor clearColor]];
+    }
+    return _shapeBtn;
 }
 
 - (UILabel *)commendLabel{
@@ -629,51 +614,14 @@
     }
     return _conformBtn;
 }
-//底部的添加按钮的点击事件
-- (void)conformBtnClick{
-    if ([self.delegate respondsToSelector:@selector(didCheckLabel)]) {
-        [self.delegate didCheckLabel];
-    }
-}
-@end
-
-
-@implementation WWLabelDetailCBCell
-
-- (instancetype)initWithFrame:(CGRect)frame{
-    if (self = [super initWithFrame:frame]) {
-        [self setUpSubviews];
-        self.backgroundColor = viewBackGround_Color;
-        self.layer.cornerRadius = self.bounds.size.width/2;
-        self.clipsToBounds = YES;
-    }
-    return self;
-}
-
-- (void)setUpSubviews{
-    [self.customTagOption sizeToFit];
-    self.customTagOption.centerX = self.width/2;
-    self.customTagOption.centerY = self.height/2;
-    [self addSubview:self.customTagOption];
-}
-
-- (UILabel *)customTagOption {
-    if (_customTagOption == nil) {
-        _customTagOption = [[UILabel alloc]init];
-        _customTagOption.textColor = [UIColor whiteColor];
-        _customTagOption.textAlignment = NSTextAlignmentCenter;
-        _customTagOption.font = [UIFont fontWithName:kFont_DINAlternate size:16*screenRate];
-    }
-    return _customTagOption;
-}
-
 @end
 
 
 @implementation WWTagCustomSetting
 
-- (instancetype)initWithModelArray:(NSArray*)modelArray clickCallBack:(void (^)(UICollectionView* collectionView,NSIndexPath* indexPath))callBack{
+- (instancetype)initWithModelArray:(NSArray*)modelArray withColor:(BOOL)isColor clickCallBack:(void (^)(UICollectionView* collectionView,NSIndexPath* indexPath))callBack{
     if (self = [super init]) {
+        self.isColor = isColor;
         self.modelArray = modelArray;
         self.clickCallBack = callBack;
         self.backgroundColor = [UIColor whiteColor];
@@ -699,15 +647,14 @@
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[conform]-0-|" options:0 metrics:nil views:dict]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.commendLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-commendT-[commend]-commendT-[col(==colH)]-(>=0)-[conform(==conformH)]-0-|" options:0 metrics:metrics views:dict]];
-    
 }
 
 #pragma mark - layout delegate
 - (CGSize)layout:(WWCollectionViewLayout*)layout sizeForCellAtIndexPath:(NSIndexPath*)indexPath{
-    return CGSizeMake(72, 100);
+    return CGSizeMake(60*screenRate, 60*screenRate);
 }
 - (CGFloat)layout:(WWCollectionViewLayout*)layout absoluteSideForSection:(NSUInteger)section{
-    return 100*screenRate;
+    return 60*screenRate;
 }
 
 #pragma mark - collection delegate
@@ -719,20 +666,13 @@
 }
 - (UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     WWTagCustomSettingCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    __weak typeof(self) weakSelf = self;
-    if ([self.modelArray[0] isKindOfClass:[UILabel class]]) {
-        cell.image = nil;
-        cell.imgView.layer.borderColor = [UIColor clearColor].CGColor;
-        cell.imgView.layer.borderWidth = 0;
-        cell.imgView.layer.cornerRadius = 0;
-        cell.imgView.clipsToBounds = YES;
-        cell.backgroundColor = RandomColor;
-    }
-    if ([self.modelArray[0] isKindOfClass:[UILabel class]]) {
-        cell.backgroundColor = [UIColor redColor];
-    }
-    if ([self.modelArray[0] isKindOfClass:[UIImage class]]) {
-        cell.backgroundColor = [UIColor blueColor];
+    if (self.isColor) {
+        cell.textLabel.textColor = nil;
+        cell.textLabel.text = nil;
+        cell.backgroundColor = [UIColor colorWithHexValue:self.modelArray[indexPath.row]];
+    }else {
+        cell.backgroundColor = RGBCOLOR(0x4E8CF8);
+        cell.fontName = self.modelArray[indexPath.row];
     }
     return cell;
 }
@@ -756,7 +696,7 @@
     *targetContentOffset = CGPointMake((targetContentOffset->x - scrollView.contentOffset.x)*2.5 + scrollView.contentOffset.x, targetContentOffset->y);
 }
 
-
+#pragma mark - 懒加载
 - (UICollectionView *)collection{
     if (_collection == nil) {
         _collection = [[UICollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:self.layout];
@@ -788,7 +728,7 @@
     if (_conformBtn == nil) {
         _conformBtn = [[UIButton alloc] init];
         _conformBtn.backgroundColor = RGBCOLOR(0xe8e8e8);
-        [_conformBtn setImage:[UIImage imageNamed:@"lookPublishLabelDetailCancelBtn"] forState:UIControlStateNormal];
+        [_conformBtn setImage:[UIImage imageNamed:@"lookPublishTwiceSBCancel"] forState:UIControlStateNormal];
         [_conformBtn addTarget:self action:@selector(conformBtnClick) forControlEvents:UIControlEventTouchUpInside];
         _conformBtn.imageView.contentMode = UIViewContentModeCenter;
     }
@@ -801,14 +741,11 @@
         _commendLabel.font = [UIFont fontWithName:kFont_Regular size:14];
         _commendLabel.textColor = RGBCOLOR(0x292929);
         if (self.modelArray.count) {
-            if ([self.modelArray[0] isKindOfClass:[UILabel class]]) {
-                _commendLabel.text = @"选择分类";
-            }
-            if ([self.modelArray[0] isKindOfClass:[UILabel class]]) {
+            if (self.isColor) {
                 _commendLabel.text = @"选择颜色";
+            }else {
+                _commendLabel.text = @"选择字体";
             }
-        }else{
-            _commendLabel.text = @"选择贴纸";
         }
     }
     return _commendLabel;
@@ -819,70 +756,34 @@
 @implementation WWTagCustomSettingCell
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
+        self.layer.cornerRadius = 30*screenRate;
         [self setUpSubviews];
-        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
 
-
 - (void)setUpSubviews{
-    [self addSubview:self.imgView];
-    [self addSubview:self.colorView];
+    [self.textLabel sizeToFit];
+    self.textLabel.centerX_sd = 30*screenRate;
+    self.textLabel.centerY_sd = 30*screenRate;
     [self addSubview:self.textLabel];
-    
-    self.imgView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.width);
-    self.colorView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.width);
-    self.colorView.layer.cornerRadius = self.frame.size.width / 2;
-    self.imgView.layer.cornerRadius = self.frame.size.width / 2;
-    self.textLabel.frame = CGRectMake(0, self.frame.size.height - 14, self.frame.size.width, 14 * screenRate);
 }
 
-- (void)setTitle:(NSString *)title{
-    _title = title.copy;
-    self.textLabel.text = _title;
-}
-
-- (void)setImage:(UIImage *)image{
-    _image = image;
-    self.imgView.image = image;
-    self.colorView.hidden = YES;
-    self.imgView.hidden = NO;
-}
-
-- (void)setColor:(NSString *)color{
-    _color = color;
-//    self.colorView.backgroundColor = [UIColor colorWithHexValue:_color];
-    self.colorView.hidden = NO;
-    self.imgView.hidden = YES;
+- (void)setFontName:(NSString *)fontName {
+    _fontName = fontName;
+    [self.textLabel sizeToFit];
+    self.textLabel.font = [UIFont fontWithName:fontName size:16*screenRate];
 }
 
 - (UILabel *)textLabel{
     if (_textLabel == nil) {
         _textLabel = [[UILabel alloc] init];
-        _textLabel.font = [UIFont fontWithName:kFont_Regular size:12 * screenRate];
-        _textLabel.textColor = RGBCOLOR(0x292929);
+        _textLabel.text = @"字";
+        _textLabel.font = [UIFont systemFontOfSize:16*screenRate];
+        _textLabel.textColor = [UIColor whiteColor];
         _textLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _textLabel;
-}
-
-- (UIView *)colorView{
-    if (_colorView == nil) {
-        _colorView = [[UIView alloc] init];
-        _colorView.layer.cornerRadius = 15;
-        _colorView.clipsToBounds = YES;
-    }
-    return _colorView;
-}
-
-- (UIImageView *)imgView{
-    if (_imgView == nil) {
-        _imgView = [[UIImageView alloc] init];
-        _imgView.contentMode = UIViewContentModeScaleAspectFill;
-        _imgView.clipsToBounds = YES;
-    }
-    return _imgView;
 }
 @end
 

@@ -31,12 +31,22 @@
 
 @end
 
-@interface WWTagImagePointView : UIImageView
-@property (nonatomic, assign,readonly) CGSize size;
+
+static NSTimeInterval const defaultTime = 2.0f;
+static CGFloat const flashWidth = 30;
+static CGFloat const centerWidth = 7.5;
+
+@interface WWTagImagePointView : UIView
+/** 闪动的 view */
+@property(nonatomic, strong) UIView *flashView;
+@property(nonatomic, strong) UIView *centerView;
+/** 定时器 */
+@property(nonatomic, strong) NSTimer *showTimer;
 @end
 
 
 @interface WWTagImgViewTextView : UIView
+@property (nonatomic, strong) UILabel* label;
 @property (nonatomic, copy) NSString* title;
 @property (nonatomic, weak) id <WWTagImgViewTextViewDelegate> delegate;
 - (instancetype)initWithLeftForward:(BOOL)leftForward;

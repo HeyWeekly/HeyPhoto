@@ -20,15 +20,13 @@ typedef void (^observeBlock)(id newValue,id oldValue);
 
 
 @interface WWTagedImgLabel : WWRootModel
+@property (nonatomic, copy) NSString* tagfont;
+@property (nonatomic, copy) NSString* tagColor;
 @property (nonatomic, copy) NSString* tagText;
 @property (nonatomic, strong) NSNumber* direction;
 @property (nonatomic, strong) NSNumber* siteX;
 @property (nonatomic, strong) NSNumber* siteY;
-@property (nonatomic, copy) NSString *itemId;
 @property (nonatomic, copy) NSString *tagLink;
-@property (nonatomic, copy) NSString *storeId;
-@property (nonatomic, copy) NSString *brandId;
-@property (nonatomic, copy) NSString *brandName;
 @end
 
 
@@ -43,17 +41,11 @@ typedef void (^observeBlock)(id newValue,id oldValue);
 
 
 @interface WWTagImageModel : WWRootModel
-@property (nonatomic, copy) NSString* cityId;
-@property (nonatomic, copy) NSString *countryId;
 @property (nonatomic, copy) NSString* content;
 @property (nonatomic, copy) NSArray<WWTagedImgListModel*>* tagImagesList;
-@property (nonatomic, copy) NSString* indexImageUrl;
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic, strong) NSNumber *createTime;
 @property (nonatomic, copy  ) NSString *mid;
 @property (nonatomic, strong) NSNumber *praise;
-@property (nonatomic, copy  ) NSString *userHeadUrl;
-@property (nonatomic, copy  ) NSString *userId;
 @property (nonatomic, copy  ) NSString *isPraise; /// 是否点赞
 @property (nonatomic, copy  ) NSString *username;
 @end

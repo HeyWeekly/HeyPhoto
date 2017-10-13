@@ -60,16 +60,11 @@
     HomeViewController *home = [[HomeViewController alloc]init];
 //        UINavigationController *schoolNav = [[UINavigationController alloc]initWithRootViewController:home];
     
-    BookViewController *book  = [[BookViewController alloc]init];
-//        UINavigationController *chidNav = [[UINavigationController alloc]initWithRootViewController:book];
-    
     CollectViewController *coll = [[CollectViewController alloc]init];
 //        UINavigationController *eduNav = [[UINavigationController alloc]initWithRootViewController:coll]
     
-    UserViewController *user = [[UserViewController alloc]init];
-//        UINavigationController *aboutNav = [[UINavigationController alloc]initWithRootViewController:user];
     RDVTabBarController *tabBarController = [[RDVTabBarController alloc] init];
-    [tabBarController setViewControllers:@[home,book,coll,coll,user]];
+    [tabBarController setViewControllers:@[home,coll]];
     self.viewController = tabBarController;
     tabBarController.delegate = self;
     [self customizeTabBarForController:tabBarController];
@@ -78,19 +73,12 @@
 - (void)tabBarController:(RDVTabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
     if ([viewController isKindOfClass:[HomeViewController class]])
     {
-        tabBarController.navigationItem.title = @"人生进度";
+        tabBarController.navigationItem.title = @" ";
     }
-    if ([viewController isKindOfClass:[BookViewController class]])
-    {
-        tabBarController.navigationItem.title = @"人间指南";
-    }
+
     if ([viewController isKindOfClass:[CollectViewController class]])
     {
         tabBarController.navigationItem.title = @"收藏";
-    }
-    if ([viewController isKindOfClass:[UserViewController class]])
-    {
-        tabBarController.navigationItem.title = @"";
     }
 }
 

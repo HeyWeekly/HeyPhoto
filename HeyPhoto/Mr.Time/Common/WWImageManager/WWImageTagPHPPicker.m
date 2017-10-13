@@ -73,15 +73,11 @@
         self.isPop = NO;
         self.isOneEnter = YES;
         self.view.backgroundColor = viewBackGround_Color;
-        
-        
         [self.view addSubview:self.collectionView];
         [self.view addSubview:self.albumMaskView];
         [self.view addSubview:self.albumNameTable];
-        
         [self.view addSubview:self.nav];
         [self.view addSubview:self.albumTileLabel];
-        
         self.originImageArray = [NSMutableArray arrayWithCapacity:9];
         self.tailoringImageArr = [NSMutableArray arrayWithCapacity:9];
         self.selectPhotoKey = [NSMutableArray arrayWithCapacity:9];
@@ -96,13 +92,15 @@
 
 - (instancetype)initWithModel:(WWTagImageModel *)modelArray andTailoringImageArray:(NSArray *)tailoringImageArray andoriginImageArray:(NSArray *)originImageArray andSelectPhotoKey:(NSArray *)selectPhotoKey andPhotoDict:(NSDictionary *)photoDict {
     if (self = [super init]) {
+        
         self.isOneEnter = NO;
         self.isPop = NO;
         self.view.backgroundColor = viewBackGround_Color;
         [self.view addSubview:self.collectionView];
+        [self.view addSubview:self.albumMaskView];
+        [self.view addSubview:self.albumNameTable];
         [self.view addSubview:self.nav];
         [self.view addSubview:self.albumTileLabel];
-        [self.view addSubview:self.albumNameTable];
         self.originImageArray = [NSMutableArray arrayWithArray:originImageArray];
         self.tailoringImageArr = [NSMutableArray arrayWithArray:tailoringImageArray];
         self.selectPhotoKey = [NSMutableArray arrayWithArray:selectPhotoKey];
@@ -115,6 +113,11 @@
         self.model = modelArray;
     }
     return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

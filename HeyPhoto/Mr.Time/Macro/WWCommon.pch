@@ -11,9 +11,7 @@
 
 ///头文件
 #import "HomeViewController.h"
-#import "UserViewController.h"
 #import "CollectViewController.h"
-#import "BookViewController.h"
 #import "RDVTabBarController.h"
 #import "SDAutoLayout.h"
 #import "WWNavigationVC.h"
@@ -75,6 +73,13 @@ __strong typeof(weakSelf) strongSelf = weakSelf
 #define kFont_SemiBold (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"PingFangSC-Semibold" : @"AppleSDGothicNeo-SemiBold")
 #define kFont_Avenir (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"Avenir-Medium" : @"PingFangSC-Regular")
 #define kFont_DINAlternate (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"DINAlternate-Bold" : @"PingFangSC-Regular")
+#define kFont_Copperplate (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"Copperplate" : @"PingFangSC-Regular")
+#define kFont_AppleSDGothicNeo (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"AppleSDGothicNeo-Regular" : @"PingFangSC-Regular")
+#define kFont_Thonburi (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"Thonburi-Italic" : @"PingFangSC-Regular")
+#define kFont_GillSans (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"GillSans-BoldItalic" : @"PingFangSC-Regular")
+#define kFont_MarkerFelt (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"MarkerFelt-Wide" : @"PingFangSC-Regular")
+#define kFont_KohinoorTelugu (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"KohinoorTelugu-Regular" : @"PingFangSC-Regular")
+#define kFont_AvenirNextCondensed (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending) ? @"AvenirNextCondensed-Regular" : @"PingFangSC-Regular")
 
 //*************error notify*************//
 #define kNotify_MainNavShowError @"kNotify_MainNavShowError"

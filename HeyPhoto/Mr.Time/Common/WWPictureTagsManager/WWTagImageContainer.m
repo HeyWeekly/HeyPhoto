@@ -104,7 +104,7 @@
     UIButton *leftBtn = [[UIButton alloc] init];
     [leftBtn setImage:[UIImage imageNamed:@"Cancel01"] forState:UIControlStateNormal];
     [leftBtn sizeToFit];
-    leftBtn.left = 9;
+    leftBtn.left = 20;
     leftBtn.centerY = bottonView.height/2;
     [leftBtn addTarget:self action:@selector(cancelClick) forControlEvents:UIControlEventTouchUpInside];
     [bottonView addSubview:leftBtn];
@@ -112,7 +112,7 @@
     UIButton *rightBtn = [[UIButton alloc] init];
     [rightBtn setImage:[UIImage imageNamed:@"duihao01"] forState:UIControlStateNormal];
     [rightBtn sizeToFit];
-    rightBtn.right = KWidth-9;
+    rightBtn.right = KWidth-20;
     rightBtn.centerY = leftBtn.centerY;
     [rightBtn addTarget:self action:@selector(sureClick) forControlEvents:UIControlEventTouchUpInside];
     [bottonView addSubview:rightBtn];

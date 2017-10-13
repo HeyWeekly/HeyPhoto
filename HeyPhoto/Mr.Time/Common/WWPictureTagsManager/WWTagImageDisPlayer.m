@@ -7,7 +7,6 @@
 //
 
 #import "WWTagImageDisPlayer.h"
-#import "WWTagImageOrderModel.h"
 #import "WWTagImageLayer.h"
 #import "WWTagImageContainer.h"
 
@@ -36,7 +35,6 @@
 @property (nonatomic, strong) WWTagImageLayer *moreView;
 //临时属性，记录图片上的坐标点
 @property (nonatomic, assign) CGPoint photoTapPoint;
-@property (nonatomic, strong) WWTagImageOrderModel *orderModel;
 @property (nonatomic, strong) NSArray *oldImageArray;
 @property (nonatomic, strong) NSMutableArray *modelImageArray;
 @property (nonatomic, assign) NSInteger index;
@@ -63,6 +61,7 @@
     }
     return self;
 }
+
 //视图布局
 - (void)setUpSubviews{
     [self addSubview:self.scrollView];
@@ -82,7 +81,7 @@
         WWTagedImgListModel* imageListModel = self.modelArray.tagImagesList[i];
         for (int k = 0; k<imageListModel.tags.count; k++) {
             WWTagedImgLabel *labelmodel = imageListModel.tags[k];
-            WWTagImageView* tag = [self addTagWithModel:labelmodel andGoodsModel:self.orderModel andVar:i];
+            WWTagImageView* tag = [self addTagWithModel:labelmodel andVar:i];
             [self adjustPosition:tag];
             [self layoutIfNeeded];
         }
@@ -90,7 +89,7 @@
     [self layoutIfNeeded];
 }
 
-- (WWTagImageView *)addTagWithModel:(WWTagedImgLabel*)model andGoodsModel:(WWTagImageOrderModel *)orderModel andVar:(int )var{
+- (WWTagImageView *)addTagWithModel:(WWTagedImgLabel*)model andVar:(int )var{
     WWTagImageView* tag = [[WWTagImageView alloc] initWithModel:model justForDisplay:self.isJustForDisplay];
     tag.translatesAutoresizingMaskIntoConstraints = NO;
     if (var != 100 && self.modelImageArray.count != 0) {
@@ -117,12 +116,14 @@
     tag.delegate = self;
     return tag;
 }
+
 - (NSMutableArray *)modelImageArray {
     if (_modelImageArray == nil) {
         _modelImageArray = [NSMutableArray arrayWithCapacity:9];
     }
     return _modelImageArray;
 }
+
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, KWidth, KWidth )];
@@ -289,13 +290,15 @@
             model.siteX = [NSNumber numberWithFloat:xRate];
             model.siteY = [NSNumber numberWithFloat:yRate];
             model.direction = @(0);
+            model.tagfont = @"PingFangSC-Regular";
+            model.tagColor = @"ffffff";
             if (!self.modelArray.tagImagesList[self.didImageView.tag].tags) {
                 self.modelArray.tagImagesList[self.didImageView.tag].tags = [NSArray array];
             }
             NSMutableArray* mArray = [NSMutableArray arrayWithArray:self.modelArray.tagImagesList[self.didImageView.tag].tags];
             [mArray addObject:model];
             self.modelArray.tagImagesList[self.didImageView.tag].tags = mArray.copy;
-            WWTagImageView* tag = [self addTagWithModel:model andGoodsModel:nil andVar:100];
+            WWTagImageView* tag = [self addTagWithModel:model andVar:100];
             [self.didImageView layoutIfNeeded];
             for (WWTagImageView* tagView in self.subviews) {
                 if ([tagView isKindOfClass:[WWTagImageView class]] && ![tagView isEqual:tag]) {
@@ -504,6 +507,7 @@
     }
     return NO;
 }
+
 - (void)tag:(WWTagImageView*)tag panedWithGesture:(UIPanGestureRecognizer*)pan{
     if ([self.delegate respondsToSelector:@selector(displayer:canMoveTag:)]) {
         BOOL canMove = [self.delegate displayer:self canMoveTag:tag];

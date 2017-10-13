@@ -12,10 +12,7 @@
 
 
 @interface WWStikerSeleectCell : UICollectionViewCell
-@property (nonatomic, strong) UIImageView *goodsImage;
-@property (nonatomic, strong) UILabel *goodsDesc;
-@property (nonatomic, strong) UILabel *goodsPrice;
-@property (nonatomic, copy) NSString* title;
+@property (nonatomic, strong) UILabel *tipLabel;
 @end
 
 @interface WWStikerSeleectVC () <UICollectionViewDelegate,UICollectionViewDataSource,WWCollectionViewLayoutDelegate>
@@ -148,48 +145,23 @@
 }
 
 - (void)setUpSubviews{
-    [self addSubview:self.goodsImage];
-    [self addSubview:self.goodsDesc];
-    [self addSubview:self.goodsPrice];
-    self.goodsImage.translatesAutoresizingMaskIntoConstraints = NO;
-    self.goodsDesc.translatesAutoresizingMaskIntoConstraints = NO;
-    self.goodsPrice.translatesAutoresizingMaskIntoConstraints = NO;
-    NSDictionary* dict = @{@"goodsimage":self.goodsImage,@"goodsDesc":self.goodsDesc,@"goodsPrice":self.goodsPrice};
-    NSDictionary *metrics = @{@"Hgoods":@(15*screenRate),@"goodsS":@(175*screenRate),@"goodsde":@(10*screenRate)};
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[goodsimage]-0-|" options:0 metrics:nil views:dict]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-Hgoods-[goodsDesc]-Hgoods-|" options:0 metrics:metrics views:dict]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-Hgoods-[goodsPrice]-Hgoods-|" options:0 metrics:metrics views:dict]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[goodsimage(==goodsS)]-goodsde-[goodsDesc]" options:0 metrics:metrics views:dict]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[goodsPrice]-goodsde-|" options:0 metrics:metrics views:dict]];
+    [self addSubview: self.tipLabel];
+    [self.tipLabel sizeToFit];
+    self.tipLabel.left_sd = 20*screenRate;
+    self.tipLabel.top_sd = 20*screenRate;
+    self.tipLabel.width_sd = self.width_sd - 40*screenRate;
+    self.tipLabel.height_sd = self.height_sd - 40*screenRate;
 }
 
-- (UIImageView *)goodsImage {
-    if (_goodsImage == nil) {
-        _goodsImage = [[UIImageView alloc]init];
-        _goodsImage.userInteractionEnabled = YES;
-        _goodsImage.contentMode = UIViewContentModeScaleAspectFill;
-        _goodsImage.clipsToBounds = YES;
+- (UILabel *)tipLabel {
+    if (_tipLabel == nil) {
+        _tipLabel = [[UILabel alloc]init];
+        _tipLabel.font = [UIFont fontWithName:kFont_Regular size:14*screenRate];
+        _tipLabel.numberOfLines = 0;
+        _tipLabel.text = @"贴纸功能简介：随机选择一个或者几个贴纸防止图片上任意位置，可以拖动放大缩小。如可以将一个绿帽子放置在朋友脑袋上开玩笑等等，由于本人时间有限，(裸辞，待业中)，此功能将会在工作之余完成。";
+        _tipLabel.textAlignment = NSTextAlignmentLeft;
+        _tipLabel.textColor = viewBackGround_Color;
     }
-    return _goodsImage;
-}
-- (UILabel *)goodsDesc {
-    if (_goodsDesc == nil) {
-        _goodsDesc = [[UILabel alloc]init];
-        _goodsDesc.font = [UIFont fontWithName:kFont_Regular size:12*screenRate];
-        _goodsDesc.numberOfLines = 2;
-        _goodsDesc.textAlignment = NSTextAlignmentLeft;
-        _goodsDesc.textColor = viewBackGround_Color;
-    }
-    return _goodsDesc;
-}
-- (UILabel *)goodsPrice {
-    if (_goodsPrice == nil) {
-        _goodsPrice = [[UILabel alloc]init];
-        _goodsPrice.font = [UIFont fontWithName:kFont_Regular size:16*screenRate];
-        _goodsPrice.numberOfLines = 1;
-        _goodsPrice.textAlignment = NSTextAlignmentLeft;
-        _goodsPrice.textColor = viewBackGround_Color;
-    }
-    return _goodsPrice;
+    return _tipLabel;
 }
 @end

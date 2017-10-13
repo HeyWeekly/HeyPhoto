@@ -9,16 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "WWTagImageModel.h"
 #import "WWTagImageView.h"
-#import "WWTagImageOrderModel.h"
 
 @class WWTagImageDisPlayer;
-
 
 /**
  *  三个代理方法 如果是编辑器那么就必须全部实现，如果是仅仅展现，那么仅仅实现需要的就可以
  */
 @protocol WWTagImageDisPlayerDelegate <NSObject>
-
 @optional
 // 关于tag
 - (void)displayer:(WWTagImageDisPlayer *)displayer whenTagDeleteBtnClickedWithTag:(WWTagImageView *)tag btn:(UIButton *)btn;
@@ -27,8 +24,6 @@
 //- (BOOL)displayer:(WWTagImageDisPlayer*)displayer canEditMaskView:(XER_StickerView*)maskView;
 - (void)displayerDidRemoveMaskView:(WWTagImageDisPlayer*)displayer;
 - (void)displayer:(WWTagImageDisPlayer*)displayer longPressedWithTag:(WWTagImageView*)tag gesture:(UILongPressGestureRecognizer*)gesture andIndex:(NSInteger )index;
-
-- (void)displayer:(WWTagImageDisPlayer*)displayer createdTagWithModel:(WWTagedImgLabel*)model tag:(WWTagImageView*)tag andWithOrderModel:(WWTagImageOrderModel *)orderModel;
 - (void)displayer:(WWTagImageDisPlayer*)displayer createdNoOrderTagWithModel:(WWTagedImgLabel*)model tag:(WWTagImageView*)tag;
 // 关于空白区域点击
 - (BOOL)displayer:(WWTagImageDisPlayer*)displayer canAddTagWithGesture:(UITapGestureRecognizer*)tap;

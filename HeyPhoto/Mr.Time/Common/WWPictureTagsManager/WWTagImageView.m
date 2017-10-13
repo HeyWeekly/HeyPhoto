@@ -8,6 +8,7 @@
 
 #import "WWTagImageView.h"
 #import "WWTagImageModel.h"
+#import "UIColor+WWExt.h"
 
 @interface WWTagImageView () <UIGestureRecognizerDelegate, WWTagImgViewTextViewDelegate>
 @property (nonatomic, strong) WWTagImagePointView* point;
@@ -38,14 +39,18 @@ static CGFloat height;
         self.isEditing = NO;
         [self tagSingleModelChanged:self.model];
         if (!self.isJustForDisplay) {
-            __weak typeof(self) weakSelf = self;
-#warning KVO
-//            [_model bindingProperty:@"direction" WithBlock:^(id newValue, id oldValue) {
-//                [weakSelf directionChanged];
-//            } forIdentify:@"labelviewv2"];
+            WEAK_SELF;
+            [_model bindingProperty:@"direction" WithBlock:^(id newValue, id oldValue) {
+                [weakSelf directionChanged];
+            } forIdentify:@"directionC"];
+            [_model bindingProperty:@"tagfont" WithBlock:^(id newValue, id oldValue) {
+                [weakSelf fontChange];
+            } forIdentify:@"fontC"];
+            [_model bindingProperty:@"tagColor" WithBlock:^(id newValue, id oldValue) {
+                [weakSelf colorChange];
+            } forIdentify:@"colorC"];
             [self setGestureRecognizers];
         }
-        
     }
     return self;
 }
@@ -104,12 +109,22 @@ static CGFloat height;
 }
 
 - (void)changeDirectionSwitcherClick{
-    //    self.model.direction = [NSNumber numberWithBool:!self.model.direction.boolValue];
+//    self.model.direction = [NSNumber numberWithBool:!self.model.direction.boolValue];
     if (self.model.direction.boolValue == 1) {
         self.model.direction = @(0);
     }else {
         self.model.direction = @(1);
     }
+}
+
+- (void)colorChange {
+    self.textView.label.textColor = [UIColor colorWithHexValue:self.model.tagColor];
+    self.point.centerView.backgroundColor = [UIColor colorWithHexValue:self.model.tagColor];
+    self.point.flashView.backgroundColor = [UIColor colorWithHexValue:self.model.tagColor];
+}
+
+- (void)fontChange {
+    self.textView.label.font = [UIFont fontWithName:self.model.tagfont size:12*screenRate];
 }
 
 - (void)directionChanged{
@@ -146,6 +161,7 @@ static CGFloat height;
     longPress.delegate = self;
     [self setGestureRecognizers:@[tap,pan,longPress]];
 }
+
 //设置标签前面的点的约束
 - (void)setUpSubviews{
     if (self.isJustForDisplay) {
@@ -157,7 +173,7 @@ static CGFloat height;
     self.point.translatesAutoresizingMaskIntoConstraints = NO;
     self.containerView.translatesAutoresizingMaskIntoConstraints = NO;
     NSDictionary* dict = @{@"point":self.point,@"con":self.containerView};
-    NSDictionary* metrics = @{@"pH":@(self.point.size.width)};
+    NSDictionary* metrics = @{@"pH":@(30)};
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[con(==pH)]-0-|" options:0 metrics:metrics views:dict]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[con(==pH)]-0-|" options:0 metrics:metrics views:dict]];
     [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[point(==pH)]-0-|" options:0 metrics:metrics views:dict]];
@@ -169,7 +185,7 @@ static CGFloat height;
     self.point.alpha = 0;
     self.point.translatesAutoresizingMaskIntoConstraints = NO;
     NSDictionary* pdict = @{@"point":self.point};
-    NSDictionary* pmetrics = @{@"pH":@(self.point.size.width)};
+    NSDictionary* pmetrics = @{@"pH":@(30)};
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[point(==pH)]-0-|" options:0 metrics:pmetrics views:pdict]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[point(==pH)]-0-|" options:0 metrics:pmetrics views:pdict]];
     [self.superview addSubview:self.textView];
@@ -209,16 +225,16 @@ static CGFloat height;
 }
 
 - (void)animationStepOneWithCallBack:(void (^)(BOOL finished))callback{
-    self.point.transform = CGAffineTransformRotate(self.point.transform, -M_PI / 4);
+//    self.point.transform = CGAffineTransformRotate(self.point.transform, -M_PI / 4);
     self.point.alpha = 0;
     [UIView animateWithDuration:9.0/30.0 animations:^{
         self.point.alpha = 1.0;
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.5 delay:6.0/30.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            self.point.transform = CGAffineTransformRotate(self.point.transform, M_PI / 4 + M_PI / 8);
+//            self.point.transform = CGAffineTransformRotate(self.point.transform, M_PI / 4 + M_PI / 8);
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:6.0/30.0 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.point.transform = CGAffineTransformRotate(self.point.transform, -M_PI / 8);
+//                self.point.transform = CGAffineTransformRotate(self.point.transform, -M_PI / 8);
             } completion:^(BOOL finished) {
                 if (callback) {
                     callback(finished);
@@ -227,24 +243,27 @@ static CGFloat height;
         }];
     }];
 }
+
 - (void)animationStepTwoWithCallBack:(void (^)(BOOL finished))callback{
-    self.point.transform = CGAffineTransformIdentity;
+//    self.point.transform = CGAffineTransformIdentity;
     [UIView animateWithDuration:8.0/30.0 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.point.alpha = 1.0;
-        self.point.transform = CGAffineTransformScale(self.point.transform, 1.3, 1.3);
+//        self.point.transform = CGAffineTransformScale(self.point.transform, 1.3, 1.3);
     } completion:^(BOOL finished) {
         callback(finished);
     }];
 }
+
 - (void)animationStepThreeWithCallBack:(void (^)(BOOL finished))callback{
     [UIView animateWithDuration:8.0/30.0 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.point.transform = CGAffineTransformIdentity;
+//        self.point.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
         if (callback) {
             callback(finished);
         }
     }];
 }
+
 - (void)animationStepFourWithCallBack:(void (^)(BOOL finished))callback{
     
     if (self.model.direction.boolValue) {
@@ -298,11 +317,11 @@ static CGFloat height;
                 [self addText];
                 [self tagSingleModelChanged:self.model];
             }
-            self.point.transform = CGAffineTransformIdentity;
+//            self.point.transform = CGAffineTransformIdentity;
             self.point.alpha = 0;
             [UIView animateWithDuration:8.0/30.0 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                 self.point.alpha = 1.0;
-                self.point.transform = CGAffineTransformScale(self.point.transform, 1.3, 1.3);
+//                self.point.transform = CGAffineTransformScale(self.point.transform, 1.3, 1.3);
             } completion:^(BOOL finished) {
                 [self animationStepThreeWithCallBack:^(BOOL finished) {
                     
@@ -336,13 +355,11 @@ static CGFloat height;
     }
 }
 
-- (void)wavePointAnimationWithCallBack:(void (^)(BOOL finished))callback{
+- (void)wavePointAnimationWithCallBack:(void (^)(BOOL finished))callback {
     if (_isAnimating) {
         return;
     }
-    WWTagImagePointView* point = [[WWTagImagePointView alloc] init];
-    point.image = _point.image;
-    point.frame = self.bounds;
+    WWTagImagePointView* point = [[WWTagImagePointView alloc] initWithFrame:self.bounds];
     _isAnimating = YES;
     [self addSubview:point];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:point attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
@@ -362,7 +379,6 @@ static CGFloat height;
 
 - (void)didMoveToSuperview{
     if (self.isJustForDisplay) {
-        
     }else{
         [super didMoveToSuperview];
         [self.superview addSubview:self.textView];
@@ -386,7 +402,6 @@ static CGFloat height;
         [self.superview layoutIfNeeded];
         [self tagSingleModelChanged:self.model ];
     }
-    
 }
 
 #pragma mark - model delegate
@@ -410,13 +425,11 @@ static CGFloat height;
         _catView.hidden = NO;
         _catCon.constant = height;
         [self.superview layoutIfNeeded];
-        _point.image = [UIImage imageNamed:@"lookPublishTagedImgLabelPointOwnGoods"];
     }else{
         _textView.title = self.model.tagText;
         _catView.hidden = YES;
         _catCon.constant = 0;
         [self.superview layoutIfNeeded];
-        _point.image = [UIImage imageNamed:@"lookPublishTagedImgLabelPointNOGoods"];
     }
     
     if ([self.delegate respondsToSelector:@selector(tagNeedAdjustPostion:)]) {
@@ -489,8 +502,7 @@ static CGFloat height;
 
 - (WWTagImagePointView *)point{
     if (_point == nil) {
-        _point = [[WWTagImagePointView alloc] init];
-        //        _point.image = self.model.goods.id_goods.length ? [UIImage imageNamed:@"lookPublishTagedImgLabelPointOwnGoods"] : [UIImage imageNamed:@"lookPublishTagedImgLabelPointNOGoods"];
+        _point = [[WWTagImagePointView alloc] initWithFrame:self.bounds];
     }
     return _point;
 }
@@ -513,43 +525,103 @@ static CGFloat height;
     }
     return _catView;
 }
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
 @end
+
 
 @implementation WWTagImagePointView
 
-static NSInteger width = 18;
-- (instancetype)init{
-    if (self = [super init]) {
-        self.backgroundColor = [UIColor clearColor];
-        self.contentMode = UIViewContentModeScaleToFill;
-        self.image = [UIImage imageNamed:@"lookPublishTagedImgLabelPointNOGoods"];
-        width = 18 * screenRate;
-        self.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.size.width]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.size.height]];
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
 
-
-- (CGSize)size{
-    return CGSizeMake(width, width);
+- (void)didMoveToSuperview {
+    [super didMoveToSuperview];
+    [self begigFlashAnimation];
+    [self prepareTimer];
 }
 
+- (UIView *)flashView {
+    if (!_flashView) {
+        _flashView =  [[UIView alloc] init];
+        [self addSubview:_flashView];
+        _flashView.backgroundColor = [UIColor whiteColor];
+        _flashView.layer.cornerRadius = flashWidth * 0.5;
+        _flashView.alpha = 0;
+    }
+    return _flashView;
+}
+
+- (UIView *)centerView {
+    if (!_centerView) {
+        _centerView =  [[UIView alloc] init];
+        [self addSubview:_centerView];
+        _centerView.backgroundColor = [UIColor whiteColor];
+        _centerView.layer.cornerRadius = centerWidth * 0.5;
+    }
+    return _centerView;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat width = self.bounds.size.width;
+    CGFloat height = self.bounds.size.height;
+    self.flashView.frame = CGRectMake((width - flashWidth) * 0.5, (height - flashWidth) * 0.5, flashWidth, flashWidth);
+    self.centerView.frame = CGRectMake((width - centerWidth) * 0.5, (height - centerWidth) * 0.5, centerWidth, centerWidth);
+}
+
+- (void)startFlashAnimation {
+    [self prepareTimer];
+}
+
+- (void)stopFlashAnimation {
+    [self invalidateTimer];
+}
+
+- (void)prepareTimer {
+    if (self.showTimer) {
+        [self invalidateTimer];
+    }
+    self.showTimer = [NSTimer scheduledTimerWithTimeInterval:defaultTime target:self selector:@selector(begigFlashAnimation) userInfo:nil repeats:true];
+    [[NSRunLoop currentRunLoop] addTimer:self.showTimer forMode:NSDefaultRunLoopMode];
+}
+
+- (void)invalidateTimer {
+    [self.showTimer invalidate];
+    self.showTimer = nil;
+}
+
+-(void)begigFlashAnimation {
+    // 缩放 + 透明度动画
+    self.flashView.transform = CGAffineTransformMakeScale(0.1, 0.1);
+    [UIView animateWithDuration:3 animations:^{
+        self.flashView.transform = CGAffineTransformMakeScale(1,1);
+        self.flashView.alpha = 1.0;
+        [UIView beginAnimations:@"flash" context:nil];
+        [UIView setAnimationDuration:2];
+        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+        self.flashView.alpha = 0;
+        [UIView commitAnimations];
+    }];
+}
+
+- (void)dealloc {
+    // 关闭定时器
+    [self invalidateTimer];
+}
 @end
 
-@interface WWTagImgViewTextView () <UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) UILabel* label;
+@interface WWTagImgViewTextView () <UIGestureRecognizerDelegate>
 @property (nonatomic, strong) NSLayoutConstraint* leftCon;
 @property (nonatomic, strong) NSLayoutConstraint* wCon;
 @property (nonatomic, assign) BOOL leftForward;
-
 @end
 
 @implementation WWTagImgViewTextView
@@ -582,10 +654,18 @@ static NSInteger width = 18;
     }
 }
 
+- (void)setTitle:(NSString *)title{
+    _title = title.copy;
+    self.label.text = _title;
+    CGSize size = [_title boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, height) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:self.label.font} context:nil].size;
+    self.wCon.constant = height / 3 + 5*screenRate + size.width + 8*screenRate > 125*screenRate ? 125*screenRate : height / 3 + 5*screenRate + size.width + 8*screenRate;
+    [self layoutIfNeeded];
+    [self setNeedsDisplay];
+}
+
 - (void)drawRect:(CGRect)rect{
     CGFloat w = self.frame.size.width;
     CGFloat h = height;
-    
     if (!self.leftForward) {
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextMoveToPoint(context, 0, h / 2);
@@ -595,7 +675,7 @@ static NSInteger width = 18;
         CGContextAddLineToPoint(context, h / 3, h);
         CGContextClosePath(context);
         CGContextSetFillColorWithColor(context, RGBCOLOR(0x2A2A2A).CGColor);
-        CGContextSetAlpha(context, 0.9);
+        CGContextSetAlpha(context, 0.5);
         CGContextFillPath(context);
     }else{
         CGContextRef context = UIGraphicsGetCurrentContext();
@@ -606,7 +686,7 @@ static NSInteger width = 18;
         CGContextAddLineToPoint(context, w - h / 3, h);
         CGContextClosePath(context);
         CGContextSetFillColorWithColor(context, RGBCOLOR(0x2A2A2A).CGColor);
-        CGContextSetAlpha(context, 0.9);
+        CGContextSetAlpha(context, 0.5);
         CGContextFillPath(context);
     }
 }
@@ -625,6 +705,7 @@ static NSInteger width = 18;
         [self.delegate text:self tapedWithGesture:tap];
     }
 }
+
 - (void)panEventInvoke:(UIPanGestureRecognizer*)pan{
     if ([self.delegate respondsToSelector:@selector(text:pannedWithGesture:)]) {
         [self.delegate text:self pannedWithGesture:pan];
@@ -666,16 +747,8 @@ static NSInteger width = 18;
     return _label;
 }
 
-- (void)setTitle:(NSString *)title{
-    _title = title.copy;
-    self.label.text = _title;
-    CGSize size = [_title boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, height) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:self.label.font} context:nil].size;
-    self.wCon.constant = height / 3 + 5*screenRate + size.width + 8*screenRate > 125*screenRate ? 125*screenRate : height / 3 + 5*screenRate + size.width + 8*screenRate;
-    [self layoutIfNeeded];
-    [self setNeedsDisplay];
-}
-
 @end
+
 
 @implementation WWTagImageShopingCateView
 - (instancetype)init{
@@ -685,15 +758,13 @@ static NSInteger width = 18;
     }
     return self;
 }
-
 @end
+
 
 @implementation WWTagImageDirectionSwitcher
 - (instancetype)init{
     if (self = [super init]) {
-        
     }
     return self;
 }
-
 @end

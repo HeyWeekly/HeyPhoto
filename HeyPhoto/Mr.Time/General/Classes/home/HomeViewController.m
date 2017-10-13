@@ -15,19 +15,32 @@
 #import "SDCycleScrollView.h"
 #import "WWTagImageEditer.h"
 #import "WWImageTagPHPPicker.h"
+#import "WWBaseTableView.h"
+#import "WWCollectButton.h"
+#import "WWRefreshHeaderView.h"
+#import "WWTagImageModel.h"
+#import "WWTagImageDetailVC.h"
+
+@interface userPublishCell : UITableViewCell
+@property (nonatomic, strong) UIImageView *coverImage;
+@property (nonatomic, strong) UIView *sepView;
+@property (nonatomic, strong) WWTagedImgListModel* model;
+@end
 
 @interface HomeYearsCell :UICollectionViewCell
 @property (nonatomic,strong) UILabel *yearsNum;
 @property (nonatomic,strong) UILabel *yearLbael;
 @end
 
-@interface HomeViewController ()<SDCycleScrollViewDelegate,TZImagePickerControllerDelegate>{
+@interface HomeViewController ()<SDCycleScrollViewDelegate,TZImagePickerControllerDelegate,UITableViewDelegate,UITableViewDataSource>{
     SDCycleScrollView* _bannerView;
 }
-@property (nonatomic, strong) UIView *animationView;
 @property (nonatomic, strong) UIButton *puslishBtn;
 @property (nonatomic, strong) NSMutableArray *originImageArray;
 @property (nonatomic, strong) NSMutableArray *cutImageArray;
+@property (nonatomic, strong) UIImageView *animationImageView;
+@property (nonatomic, strong) WWBaseTableView *tableView;
+@property (nonatomic, strong) NSMutableArray <WWTagImageModel*> *modelArray;
 @end
 
 #define totalColumns 10
@@ -42,6 +55,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = viewBackGround_Color;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addTagModel:) name:@"addModel" object:nil];
+    self.modelArray = [NSMutableArray array];
     NSArray *imagesURLStrings = @[@"",@""];
     _bannerView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(105*screenRate, 40, 175*screenRate, 140*screenRate) delegate:self placeholderImage:nil];
     _bannerView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
@@ -52,81 +67,57 @@
     [self setupSubViews];
 }
 
+- (void)addTagModel:(NSNotification *)model {
+    WEAK_SELF;
+    [self.tableView.mj_header beginRefreshing];
+    NSDictionary *dict = model.userInfo;
+    WWTagImageModel *model1 = (WWTagImageModel *)dict[@"model"];
+    [self.modelArray addObject:model1];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf.tableView.mj_header endRefreshing];
+        [weakSelf.tableView reloadData];
+    });
+}
+
+#pragma mark - tableView
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.modelArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    userPublishCell *cell = [tableView dequeueReusableCellWithIdentifier:@"userPublishCell"];
+    if (!cell) {
+        cell = [[userPublishCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"userPublishCell"];
+    }
+    cell.model = self.modelArray[indexPath.row].tagImagesList[0];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    WWTagImageDetailVC *vc = [[WWTagImageDetailVC alloc]initWithMolde:self.modelArray[indexPath.row]];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 300*screenRate;
+}
+
 - (void)setupSubViews {
+    [self.view addSubview:self.animationImageView];
+    [self.animationImageView sizeToFit];
+    self.animationImageView.left = 40*screenRate;
+    self.animationImageView.top = 74;
+    [GCDQueue executeInMainQueue:^{
+        [self scaleAnimation];
+    } afterDelaySecs:1.f];
     [self.view addSubview:self.puslishBtn];
-    [self.puslishBtn sizeToFit];
-    self.puslishBtn.centerX = self.view.centerX;
-    self.puslishBtn.bottom = self.view.bottom - 10*screenRate - 49;
-    
-    [self creatBackView];
-    [self creatYearsView];
-}
-
-- (void)creatBackView {
-    CGFloat cellW = 12*screenRate;
-    CGFloat cellH = 12*screenRate;
-    CGFloat margin =19*screenRate;
-    for(int index = 0; index< 100; index++) {
-        UIView *cellView = [[UIView alloc ]init ];
-        cellView.backgroundColor = RGBCOLOR(0x404040);
-        // 计算行号 & 列号
-        int row = index / totalColumns;
-        int col = index % totalColumns;
-        //根据行号和列号来确定子控件的坐标
-        CGFloat cellX = 44*screenRate + col * (cellW + margin);
-        CGFloat cellY = 197*screenRate+row * (cellH + margin);
-        cellView.frame = CGRectMake(cellX, cellY, cellW, cellH);
-        // 添加到view中
-        [self.view addSubview:cellView];
-    }
-}
-
-- (void)creatYearsView {
-    CGFloat cellW2 = 22*screenRate;
-    CGFloat cellH2 = 22*screenRate;
-    CGFloat margin2 =9*screenRate;
-    WWUserModel *model =  [WWUserModel shareUserModel];
-    model = (WWUserModel*)[NSKeyedUnarchiver unarchiveObjectWithFile:ArchiverPath];
-    for(int index = 0; index< model.yearDay.integerValue; index++) {
-        UIView *cellView = [[UIView alloc ]init ];
-//        cellView.layer.shadowColor = RGBCOLOR(0x27ECCC).CGColor;
-//        cellView.layer.shadowOpacity = 0.35;
-//        cellView.layer.shadowRadius = 6;
-//        cellView.layer.shadowOffset = CGSizeMake(1, 1);
-        cellView.layer.cornerRadius = 4;
-        cellView.clipsToBounds = YES;
-        int row = index / totalColumns;
-        int col = index % totalColumns;
-        CGFloat cellX = 39*screenRate + col * (cellW2 + margin2);
-        CGFloat cellY = 192*screenRate+row * (cellH2 + margin2);
-        cellView.frame = CGRectMake(cellX, cellY, cellW2, cellH2);
-        CAGradientLayer *gradientLayer = [[CAGradientLayer alloc] init];
-        //位置x,y    自己根据需求进行设置   使其从不同位置进行渐变
-        gradientLayer.startPoint = CGPointMake(0.0, 0.0);
-        gradientLayer.endPoint = CGPointMake(0.9, 0.9);
-        gradientLayer.frame = CGRectMake(0, 0, CGRectGetWidth(cellView.frame), CGRectGetHeight(cellView.frame));
-        WWUserModel *model =  [WWUserModel shareUserModel];
-        model = (WWUserModel*)[NSKeyedUnarchiver unarchiveObjectWithFile:ArchiverPath];
-        if (index == model.yearDay.integerValue-1) {
-            gradientLayer.colors = @[(__bridge id)RGBCOLOR(0x27EBCD).CGColor,(__bridge id)RGBCOLOR(0x16C3FE).CGColor];
-        }else if(index >= 0+row*10 && index <= row*10+3 ){
-            gradientLayer.backgroundColor = [UIColor colorWithRed:0/255.0 green:255/255.0 blue:213/255.0 alpha:1].CGColor;
-        }else if(index >=4+row*10 && index <= row*10+5 ){
-            gradientLayer.backgroundColor = [UIColor colorWithRed:0/255.0 green:246/255.0 blue:239/255.0 alpha:1].CGColor;
-        }else if(index >= 6+row*10 && index <= row*10+9 ){
-            gradientLayer.backgroundColor = [UIColor colorWithRed:0/255.0 green:241/255.0 blue:255/255.0 alpha:1].CGColor;
-        }
-        [cellView.layer addSublayer:gradientLayer];
-        // 添加到view 中
-        [self.view addSubview:cellView];
-        
-        if (index == model.yearDay.integerValue-1) {
-            self.animationView = cellView;
-            [GCDQueue executeInMainQueue:^{
-                [self scaleAnimation];
-            } afterDelaySecs:1.f];
-        }
-    }
+    self.puslishBtn.right_sd = KWidth - 80*screenRate;
+    self.puslishBtn.centerY_sd = self.animationImageView.centerY_sd-18*screenRate;
+    self.puslishBtn.width_sd = 50*screenRate;
+    self.puslishBtn.height_sd = 50*screenRate;
+    [self.view addSubview:self.tableView];
+    [self.tableView.mj_header beginRefreshing];
 }
 
 //心跳动画
@@ -136,7 +127,7 @@
     scaleAnimation.delegate           = self;
     scaleAnimation.duration           = 0.25f;
     scaleAnimation.toValue            = [NSValue valueWithCGPoint:CGPointMake(1.15, 1.15)];
-    [self.animationView pop_addAnimation:scaleAnimation forKey:nil];
+    [self.animationImageView pop_addAnimation:scaleAnimation forKey:nil];
 }
 
 - (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished {
@@ -151,7 +142,7 @@
         scaleAnimation.dynamicsTension     = 600.f;
         scaleAnimation.dynamicsFriction    = 22.f;
         scaleAnimation.dynamicsMass        = 2.f;
-        [self.animationView pop_addAnimation:scaleAnimation forKey:nil];
+        [self.animationImageView pop_addAnimation:scaleAnimation forKey:nil];
     } else if ([anim.name isEqualToString:@"SpringAnimation"]) {
         [self performSelector:@selector(scaleAnimation) withObject:nil afterDelay:1];
     }
@@ -188,6 +179,18 @@
     [self.navigationController pushViewController:imageEditerVC animated:NO];
 }
 
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    CGFloat viewHeight = scrollView.height + scrollView.contentInset.top;
+//    for (userPublishCell *cell in [self.tableView visibleCells]) {
+//        CGFloat y = cell.centerY - scrollView.contentOffset.y;
+//        CGFloat p = y - viewHeight / 2;
+//        CGFloat scale = cos(p / viewHeight * 0.8) * 0.95;
+//        [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState animations:^{
+//            cell.transform = CGAffineTransformMakeScale(scale, scale);
+//        } completion:NULL];
+//    }
+//}
+
 #pragma mark - 点击事件
 - (void)publishBtnClick {
 //    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:3 delegate:self];
@@ -203,6 +206,31 @@
 }
 
 #pragma mark - lazyLoad
+- (WWBaseTableView *)tableView {
+    if (!_tableView) {
+        _tableView = [[WWBaseTableView alloc] initWithFrame:CGRectMake(20*screenRate, _bannerView.bottom+29*screenRate, KWidth-40*screenRate, KHeight-(_bannerView.bottom+29*screenRate)-49)];
+        _tableView.delegate = self;
+        _tableView.dataSource  = self;
+        _tableView.backgroundColor = viewBackGround_Color;
+        _tableView.showsVerticalScrollIndicator = NO;
+        _tableView.showsHorizontalScrollIndicator = NO;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        WEAK_SELF;
+        _tableView.mj_header = [WWRefreshHeaderView headerWithRefreshingBlock:^{
+            [weakSelf loadNewData];
+        }];
+    }
+    return _tableView;
+}
+
+- (UIImageView *)animationImageView {
+    if (_animationImageView == nil) {
+        _animationImageView = [[UIImageView alloc]init];
+        _animationImageView.image = [UIImage imageNamed:@"boolRedLike"];
+    }
+    return _animationImageView;
+}
+
 - (UIButton *)puslishBtn {
     if (_puslishBtn == nil) {
         _puslishBtn = [[UIButton alloc]init];
@@ -224,6 +252,153 @@
         _cutImageArray = [NSMutableArray arrayWithCapacity:10];
     }
     return _cutImageArray;
+}
+
+- (void)loadNewData {
+    WEAK_SELF;
+    NSMutableArray *mArray = [NSMutableArray arrayWithCapacity:10];
+    NSMutableArray *mLabelArray = [NSMutableArray arrayWithCapacity:10];
+    for (int i = 0; i < 4; i++) {
+        if (i == 0) {
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"womencat"];
+            model.image = image;
+            for (int j = 0; j<2; j++) {
+                if (j == 0) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(0);
+                    labelModel.siteX = @(0.5226666);
+                    labelModel.siteY = @(0.6671111);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"77EEDF";
+                    labelModel.tagfont = @"Copperplate";
+                    labelModel.tagText = @"好好吃😆";
+                    [mLabelArray addObject:labelModel];
+                }
+                if (j == 1) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(1);
+                    labelModel.siteX = @(0.4066667);
+                    labelModel.siteY = @(0.6457778);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"FC577A";
+                    labelModel.tagfont = @"PingFangSC-Semibold";
+                    labelModel.tagText = @"大长腿😆";
+                    [mLabelArray addObject:labelModel];
+                }
+            }
+            model.tags = mLabelArray.copy;
+            [mArray addObject:model];
+        }
+        if (i == 1) {
+            [mLabelArray removeAllObjects];
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"gouzi"];
+            model.image = image;
+            for (int k = 0; k < 3; k++) {
+                if (k == 0) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(0);
+                    labelModel.siteX = @(0.5053333);
+                    labelModel.siteY = @(0.09333333);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"F8E71C";
+                    labelModel.tagfont = @"PingFangSC-Semibold";
+                    labelModel.tagText = @"这个逗比😆";
+                    [mLabelArray addObject:labelModel];
+                }
+                if (k == 1) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(0);
+                    labelModel.siteX = @(0.488);
+                    labelModel.siteY = @(0.3253333);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"292929";
+                    labelModel.tagfont = @"PingFangSC-Semibold";
+                    labelModel.tagText = @"逗比不要看我😤";
+                    [mLabelArray addObject:labelModel];
+                }
+                if (k == 2) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(0);
+                    labelModel.siteX = @(0.2991111);
+                    labelModel.siteY = @(0.2306667);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"77EEDF";
+                    labelModel.tagfont = @"Copperplate";
+                    labelModel.tagText = @"瞅你咋滴？";
+                    [mLabelArray addObject:labelModel];
+                }
+            }
+            model.tags = mLabelArray.copy;
+            [mArray addObject:model];
+        }
+        if (i == 2) {
+            [mLabelArray removeAllObjects];
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"sleepcat"];
+            model.image = image;
+            for (int q = 0; q<2; q++) {
+                if (q == 0) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(1);
+                    labelModel.siteX = @(0.2853333);
+                    labelModel.siteY = @(0.3524444);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"ffffff";
+                    labelModel.tagfont = @"PingFangSC-Regular";
+                    labelModel.tagText = @"我们去睡吧😝";
+                    labelModel.direction = @(1);
+                    [mLabelArray addObject:labelModel];
+                }
+                if (q == 1) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.siteX = @(0.5226666);
+                    labelModel.siteY = @(0.164);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"FC577A";
+                    labelModel.tagfont = @"PingFangSC-Semibold";
+                    labelModel.tagText = @"好困啊💤";
+                    [mLabelArray addObject:labelModel];
+                }
+            }
+            model.tags = mLabelArray.copy;
+            [mArray addObject:model];
+        }
+        if (i == 3) {
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"minebuou"];
+            model.image = image;
+            [mArray addObject:model];
+        }
+        if (i == 4) {
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"chongqing"];
+            model.image = image;
+            [mArray addObject:model];
+        }
+        if (i == 5) {
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"minebuou"];
+            model.image = image;
+            [mArray addObject:model];
+        }
+    }
+    
+    WWTagImageModel *model = [[WWTagImageModel alloc]initWithDict:nil];
+    model.username = @"林森";
+    model.isPraise = @"NO";
+    model.praise = @(14354);
+    model.content = @"      周某是上海市几十万猫奴之一。猫和普通的毒品不同，没有《动物保护法》去保护一只猫的权利，当然也就不负任何法律责任。中了猫毒的人，也不用被关进戒猫所，所以周某只能在家里自生自灭。\n      微瘦、长发、一脸面瘫，稚嫩地举止和衣着实在不像是一个28岁的职业女性，大学曾获两次二等奖学金的她，现在是一名动画片编剧，有良好的表达能力，但是在一次戒猫同好会上，她第一次讲诉了自己吸猫的经历时，几次泣不成声。\n      童年的周某父母离异，虽然得到了母亲的很多爱，童年对她来说是很孤独的。为了可以独立生活，她努力学习，获得了学校的奖学金，加油学习动画专业技能，哪里知道毕业是一条绝路。在学校根本没学到该有的技能，这让面临毕业的她面临待遇差、独孤、陌生环境等问题。\n      “那时的我坚决不要家里的钱，就是想独立起来。没想到毕业以后社会带来的生存问题这么困难。拒绝任何社交、聚会。我甚至觉得自己是个垃圾，恨不得去死。”\n      直到那天，一个平时看似好心的同事，把周某带进了那个地方——猫咪咖啡馆。 ";
+    model.title = @"      吸猫日记";
+    model.tagImagesList = mArray.copy;
+    [self.modelArray addObject:model];
+    [self.modelArray addObject:model];
+    [self.modelArray addObject:model];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf.tableView.mj_header endRefreshing];
+        [weakSelf.tableView reloadData];
+    });
 }
 
 @end
@@ -271,4 +446,47 @@
     return _yearsNum;
 }
 
+@end
+
+
+@implementation userPublishCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.backgroundColor = [UIColor clearColor];
+        [self addSubview:self.coverImage];
+        [self.coverImage sizeToFit];
+        self.coverImage.left = 0;
+        self.coverImage.top = 0;
+        self.coverImage.width_sd = self.width_sd;
+        self.coverImage.height_sd = 280*screenRate;
+        [self addSubview:self.sepView];
+        self.sepView.frame = CGRectMake(0, self.coverImage.bottom, self.width_sd, 20*screenRate);
+    }
+    return self;
+}
+
+
+- (void)setModel:(WWTagedImgListModel* )model {
+    _model = model;
+    self.coverImage.image = model.image;
+}
+
+- (UIImageView *)coverImage {
+    if (!_coverImage) {
+        _coverImage = [[UIImageView alloc]init];
+        _coverImage.contentMode = UIViewContentModeScaleAspectFill;
+        _coverImage.layer.cornerRadius = 20*screenRate;
+        _coverImage.clipsToBounds = YES;
+    }
+    return _coverImage;
+}
+
+- (UIView *)sepView {
+    if (!_sepView) {
+        _sepView = [[UIView alloc]init];
+        _sepView.backgroundColor = viewBackGround_Color;
+    }
+    return _sepView;
+}
 @end

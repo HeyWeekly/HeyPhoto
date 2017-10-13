@@ -243,7 +243,7 @@
 - (UIView *)searchLine {
     if (_searchLine == nil) {
         _searchLine = [[UIView alloc]init];
-        _searchLine.backgroundColor = RGBCOLOR(0x333333);
+        _searchLine.backgroundColor = RGBCOLOR(0x666666);
     }
     return _searchLine;
 }

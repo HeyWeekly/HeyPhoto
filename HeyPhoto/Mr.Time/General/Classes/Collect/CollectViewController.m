@@ -10,6 +10,8 @@
 #import <YYText/YYText.h>
 #import "Mr_Time-Swift.h"
 #import "WWLabel.h"
+#import "WWTagImageModel.h"
+#import "WWTagImageDetailVC.h"
 
 @interface  CollectCardView : UIView
 @property (nonatomic, strong) UITableView *tableView;
@@ -24,6 +26,7 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *listArray;
 @property (nonatomic, strong) CardView *cardView;
+@property (nonatomic, strong) NSMutableArray <WWTagImageModel*> *modelArray;
 @end
 
 @implementation CollectViewController
@@ -31,6 +34,7 @@
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = viewBackGround_Color;
+    [self loadData];
     [self setupViews];
 }
 - (void)setupViews {
@@ -40,24 +44,7 @@
     [self.cardView setWithCards:arr];
     [self.cardView showStyleWithStyle:1];
 }
-- (NSMutableArray *)listArray {
-    if (_listArray == nil) {
-        self.listArray = [NSMutableArray array];
-        NSArray *act1 = @[@"别在20岁就绝口不提你的梦想，相信我，它一直在你的身边且从未走远。别在20岁就绝口不提你的梦想，相信我，它一直在你的身边且从未走远。别在20岁就绝口不提你的梦想。",@"何必要在乎别人所说，做你自己活得开心最重要。",@"坚持如一"];
-        NSArray *act2 = @[@"别在20岁就绝口不提你的梦想，相信我，它一直在你的身边且从未走远。别在20岁就绝口不提你的梦想，相信我，它一直在你的身边且从未走远。别在20岁就绝口不提你的梦想。",@"何必要在乎别人所说，做你自己活得开心最重要。",@"坚持如一"];
-        NSArray *act3 = @[@"别在20岁就绝口不提你的梦想，相信我，它一直在你的身边且从未走远。别在20岁就绝口不提你的梦想，相信我，它一直在你的身边且从未走远。别在20岁就绝口不提你的梦想。"];
-        NSArray *act4 = @[@"别在20岁就绝口不提你的梦想，相信我，它一直在你的身边且从未走远。别在20岁就绝口不提你的梦想，相信我，它一直在你的身边且从未走远。别在20岁就绝口不提你的梦想。",@"何必要在乎别人所说，做你自己活得开心最重要。",@"坚持如一",@"何必要在乎别人所说，做你自己活得开心最重要。",@"坚持如一"];
-        NSArray *act5 = @[@"别在20岁就绝口不提你的梦想，相信我，它一直在你的身边且从未走远。别在20岁就绝口不提你的梦想，相信我，它一直在你的身边且从未走远。别在20岁就绝口不提你的梦想。",@"此刻正在阅读这封信的你身在何方，在做些什么？十五岁的我，怀揣着无法向任何人述说的烦恼的种子，我有话要对十五岁的你说，是否就能将一切诚实地坦露，问问自己到底自己为什么一定要向着某个目的地前行，只要不停的问终能看到答案，狂风巨浪的青春之海虽然很艰难，但是也请将梦想的小舟驶向明天的岸边。只要相信自己的声音前行就可以了，即使是已成为大人的我，也还是会受伤会有睡不着的夜晚，但是，我仍活在苦涩而又甜蜜的这一刻。最后，谢谢你。活在苦涩而又甜蜜的这。"];
-        NSMutableDictionary *actHeader = @{@"flag":@"NO",@"act":act1,@"year":@"TO 21 YEARS OLD",@"count":@"3"}.mutableCopy;
-        NSMutableDictionary *actHeader2 = @{@"flag":@"NO",@"act":act2,@"year":@"TO 34 YEARS OLD",@"count":@"3"}.mutableCopy;
-        NSMutableDictionary *actHeader3 = @{@"flag":@"NO",@"act":act3,@"year":@"TO 25 YEARS OLD",@"count":@"1"}.mutableCopy;
-        NSMutableDictionary *actHeader4 = @{@"flag":@"NO",@"act":act4,@"year":@"TO 29 YEARS OLD",@"count":@"5"}.mutableCopy;
-        NSMutableDictionary *actHeader5 = @{@"flag":@"NO",@"act":act5,@"year":@"TO 33 YEARS OLD",@"count":@"2"}.mutableCopy;
-        NSMutableDictionary *array = @[actHeader,actHeader2,actHeader3,actHeader4,actHeader5].mutableCopy;
-        _listArray = array.mutableCopy;
-    }
-    return _listArray;
-}
+
 #pragma mark - tableView
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.cardView.filterArr.count;
@@ -73,10 +60,11 @@
             layout.selectIdx = indexPath.row;
         }
     };
-    cell.backgroundColor = [UIColor whiteColor];
-    CollectCardView *collView = [[CollectCardView alloc]init];
-    collView.countLabel.text = [NSString stringWithFormat:@"%ld",indexPath.row];
-    view.frame = cell.bounds;
+    cell.backgroundColor = [UIColor redColor];
+    UIButton *collView = [[UIButton alloc]init];
+    collView.frame = cell.bounds;
+    [collView setImage:self.modelArray[indexPath.row].tagImagesList[indexPath.row].image forState:UIControlStateNormal];
+    collView.imageView.contentMode = UIViewContentModeScaleAspectFill;
     collView.tag = 2000;
     [cell addSubview:collView];
     return cell;
@@ -91,6 +79,7 @@
     }
     return arr;
 }
+
 - (CardView *)cardView {
     if (!_cardView) {
         _cardView = [[CardView alloc] initWithFrame:CGRectMake(0, 64, KWidth, KHeight-64-49)];
@@ -99,6 +88,7 @@
     }
     return _cardView;
 }
+
 - (WWNavigationVC *)nav {
     if (_nav == nil) {
         _nav = [[WWNavigationVC alloc]initWithFrame:CGRectMake(0, 20, KWidth, 44)];
@@ -107,10 +97,155 @@
     }
     return _nav;
 }
+
+- (void)loadData {
+    NSMutableArray *mArray = [NSMutableArray arrayWithCapacity:10];
+    NSMutableArray *mLabelArray = [NSMutableArray arrayWithCapacity:10];
+    for (int i = 0; i < 6; i++) {
+        if (i == 0) {
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"womencat"];
+            model.image = image;
+            for (int j = 0; j<2; j++) {
+                if (j == 0) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(0);
+                    labelModel.siteX = @(0.5226666);
+                    labelModel.siteY = @(0.6671111);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"77EEDF";
+                    labelModel.tagfont = @"Copperplate";
+                    labelModel.tagText = @"好好吃😆";
+                    [mLabelArray addObject:labelModel];
+                }
+                if (j == 1) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(1);
+                    labelModel.siteX = @(0.4066667);
+                    labelModel.siteY = @(0.6457778);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"FC577A";
+                    labelModel.tagfont = @"PingFangSC-Semibold";
+                    labelModel.tagText = @"大长腿😆";
+                    [mLabelArray addObject:labelModel];
+                }
+            }
+            model.tags = mLabelArray.copy;
+            [mArray addObject:model];
+        }
+        if (i == 1) {
+            [mLabelArray removeAllObjects];
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"gouzi"];
+            model.image = image;
+            for (int k = 0; k < 3; k++) {
+                if (k == 0) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(0);
+                    labelModel.siteX = @(0.5053333);
+                    labelModel.siteY = @(0.09333333);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"F8E71C";
+                    labelModel.tagfont = @"PingFangSC-Semibold";
+                    labelModel.tagText = @"这个逗比😆";
+                    [mLabelArray addObject:labelModel];
+                }
+                if (k == 1) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(0);
+                    labelModel.siteX = @(0.488);
+                    labelModel.siteY = @(0.3253333);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"292929";
+                    labelModel.tagfont = @"PingFangSC-Semibold";
+                    labelModel.tagText = @"逗比不要看我😤";
+                    [mLabelArray addObject:labelModel];
+                }
+                if (k == 2) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(0);
+                    labelModel.siteX = @(0.2991111);
+                    labelModel.siteY = @(0.2306667);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"77EEDF";
+                    labelModel.tagfont = @"Copperplate";
+                    labelModel.tagText = @"瞅你咋滴？";
+                    [mLabelArray addObject:labelModel];
+                }
+            }
+            model.tags = mLabelArray.copy;
+            [mArray addObject:model];
+        }
+        if (i == 2) {
+            [mLabelArray removeAllObjects];
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"sleepcat"];
+            model.image = image;
+            for (int q = 0; q<2; q++) {
+                if (q == 0) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.direction = @(1);
+                    labelModel.siteX = @(0.2853333);
+                    labelModel.siteY = @(0.3524444);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"ffffff";
+                    labelModel.tagfont = @"PingFangSC-Regular";
+                    labelModel.tagText = @"我们去睡吧😝";
+                    labelModel.direction = @(1);
+                    [mLabelArray addObject:labelModel];
+                }
+                if (q == 1) {
+                    WWTagedImgLabel *labelModel = [[WWTagedImgLabel alloc]initWithDict:nil];
+                    labelModel.siteX = @(0.5226666);
+                    labelModel.siteY = @(0.164);
+                    labelModel.tagLink = @"EMPTY";
+                    labelModel.tagColor = @"FC577A";
+                    labelModel.tagfont = @"PingFangSC-Semibold";
+                    labelModel.tagText = @"好困啊💤";
+                    [mLabelArray addObject:labelModel];
+                }
+            }
+            model.tags = mLabelArray.copy;
+            [mArray addObject:model];
+        }
+        if (i == 3) {
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"minebuou"];
+            model.image = image;
+            [mArray addObject:model];
+        }
+        if (i == 4) {
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"chongqing"];
+            model.image = image;
+            [mArray addObject:model];
+        }
+        if (i == 5) {
+            WWTagedImgListModel *model = [[WWTagedImgListModel alloc] initWithDict:nil];
+            UIImage *image = [UIImage imageNamed:@"minebuou"];
+            model.image = image;
+            [mArray addObject:model];
+        }
+    }
+    
+    WWTagImageModel *model = [[WWTagImageModel alloc]initWithDict:nil];
+    model.username = @"林森";
+    model.isPraise = @"NO";
+    model.praise = @(14354);
+    model.content = @"      周某是上海市几十万猫奴之一。猫和普通的毒品不同，没有《动物保护法》去保护一只猫的权利，当然也就不负任何法律责任。中了猫毒的人，也不用被关进戒猫所，所以周某只能在家里自生自灭。\n      微瘦、长发、一脸面瘫，稚嫩地举止和衣着实在不像是一个28岁的职业女性，大学曾获两次二等奖学金的她，现在是一名动画片编剧，有良好的表达能力，但是在一次戒猫同好会上，她第一次讲诉了自己吸猫的经历时，几次泣不成声。\n      童年的周某父母离异，虽然得到了母亲的很多爱，童年对她来说是很孤独的。为了可以独立生活，她努力学习，获得了学校的奖学金，加油学习动画专业技能，哪里知道毕业是一条绝路。在学校根本没学到该有的技能，这让面临毕业的她面临待遇差、独孤、陌生环境等问题。\n      “那时的我坚决不要家里的钱，就是想独立起来。没想到毕业以后社会带来的生存问题这么困难。拒绝任何社交、聚会。我甚至觉得自己是个垃圾，恨不得去死。”\n      直到那天，一个平时看似好心的同事，把周某带进了那个地方——猫咪咖啡馆。 ";
+    model.title = @"      吸猫日记";
+    model.tagImagesList = mArray.copy;
+    [self.modelArray addObject:model];
+    [self.modelArray addObject:model];
+    [self.modelArray addObject:model];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 @end
+
+
+
 
 @implementation CollectCardView
 - (instancetype)initWithFrame:(CGRect)frame {
